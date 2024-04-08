@@ -1,0 +1,86 @@
+server:
+  port: 8080
+# DEPLOY
+frontDomain: "https://www.whisperquestion.com"
+backDomain: "https://www.whisperquestion.com"
+
+#TEST
+#frontDomain: "http://localhost:5173"
+#backDomain: "http://http:/localhost:8080"
+dbDomain: "222.119.100.89:3382"
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://${dbDomain}/wqproject?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul
+    username: wqproject
+    password: wq1234!
+#    url: jdbc:mysql://localhost:3306/wqproject?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul
+#    username: root
+#    password: 1234
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  #카카오 로그인 설정
+  profiles:
+    include: oauth2, app
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 37d762ffd7e136ef36d88779ff6b0509
+            client-secret: 6JMtuxi3wOBJJehwu6MQiw94IpdXT1N7
+            redirect-uri: ${backDomain}/oauth2/callback/kakao
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, account_email
+            client-name: kakao
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+      enabled: true
+
+# for mac
+# mac os 보안에 따라 /Users/[UserName]/ . . .
+# root 경로에 디렉토리 생성 불가 (read only)
+#uploadPath: /Users/danhyeon/wqproject/resource/image/
+
+# for linux
+uploadPath: /home/ubuntu/wqproject/resource/image/
+
+# for window
+#uploadPath: C:/wqproject/resource/image/
+
+# JWT
+jwt:
+  header: Authorization
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
+  token-validity-in-seconds: 86400 # ttl (초)
+
+app:
+  auth:
+    token-secret: dev-token-secret-key
+    token-expiration-time: 1209600000 #14일
+  oauth2:
+    authorized-redirect-uris: ${frontDomain}/oauth2/redirect
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.springframework.coreLocalVariableTableParameterNameDiscoverer: error
