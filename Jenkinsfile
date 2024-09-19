@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     // Get the ID of the sbb:latest image
-                    def oldImageId = sh(script: "docker images BE_wqproject:latest -q", returnStdout: true).trim()
+                    def oldImageId = sh(script: "docker images be_wqproject:latest -q", returnStdout: true).trim()
                     env.oldImageId = oldImageId
                 }
 
@@ -56,7 +56,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t BE_wqproject:${timestamp} ."
+                    sh "docker build -t be_wqproject:${timestamp} ."
                 }
             }
         }
@@ -65,47 +65,47 @@ pipeline {
             steps {
                 script {
                     // Check if the container is already running
-                    def isRunning = sh(script: "docker ps -q -f name=BE_wqproject", returnStdout: true).trim()
+                    def isRunning = sh(script: "docker ps -q -f name=be_wqproject", returnStdout: true).trim()
 
                     if (isRunning) {
-                        sh "docker rm -f BE_wqproject"
+                        sh "docker rm -f be_wqproject"
                     }
 
                     // Run the new container
                     try {
                         sh """
                         docker run \
-                          --name=BE_wqproject \
+                          --name=be_wqproject \
                           -p 8080:8080 \
                           -v /docker_projects/wqproejct-be/volumes/gen:/gen \
                           --restart unless-stopped \
                           --network application \
                           -e TZ=Asia/Seoul \
                           -d \
-                          BE_wqproject:${timestamp}
+                          be_wqproject:${timestamp}
                         """
                     } catch (Exception e) {
                         // If the container failed to run, remove it and the image
-                        isRunning = sh(script: "docker ps -q -f name=BE_wqproject", returnStdout: true).trim()
+                        isRunning = sh(script: "docker ps -q -f name=be_wqproject", returnStdout: true).trim()
 
                         if (isRunning) {
-                            sh "docker rm -f BE_wqproject"
+                            sh "docker rm -f be_wqproject"
                         }
 
-                        def imageExists = sh(script: "docker images -q BE_wqproject:${timestamp}", returnStdout: true).trim()
+                        def imageExists = sh(script: "docker images -q be_wqproject:${timestamp}", returnStdout: true).trim()
 
                         if (imageExists) {
-                            sh "docker rmi BE_wqproject:${timestamp}"
+                            sh "docker rmi be_wqproject:${timestamp}"
                         }
 
                         error("Failed to run the Docker container.")
                     }
 
                     // If there's an existing 'latest' image, remove it
-                    def latestExists = sh(script: "docker images -q BE_wqproject:latest", returnStdout: true).trim()
+                    def latestExists = sh(script: "docker images -q be_wqproject:latest", returnStdout: true).trim()
 
                     if (latestExists) {
-                        sh "docker rmi BE_wqproject:latest"
+                        sh "docker rmi be_wqproject:latest"
 
                         if(!oldImageId.isEmpty()) {
                         	sh "docker rmi ${oldImageId}"
@@ -113,7 +113,7 @@ pipeline {
                     }
 
                     // Tag the new image as 'latest'
-                    sh "docker tag BE_wqproject:${env.timestamp} BE_wqproject:latest"
+                    sh "docker tag be_wqproject:${env.timestamp} be_wqproject:latest"
                 }
             }
         }
