@@ -13,8 +13,8 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://mariadb_1:3306/wqproject?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul
-    username: wqproject
-    password: wq1234!
+    username: whisperquestion
+    password: 1qw2#ER$
   jpa:
     open-in-view: true
     hibernate:
