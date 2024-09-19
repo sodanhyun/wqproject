@@ -16,7 +16,7 @@ import org.springframework.web.socket.config.annotation.*;
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Value("${frontDomain}")
+    @Value("${domainName}")
     private String frontDomain;
 
     private final StompHandler stompHandler;
