@@ -20,8 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/question")
-@RequestMapping("/api/question")
+@RequestMapping("/question")
 @RequiredArgsConstructor
 @Slf4j
 public class QuestionController {

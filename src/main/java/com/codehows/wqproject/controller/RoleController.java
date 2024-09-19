@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-//@RequestMapping("/role")
-@RequestMapping("/api/role")
+@RequestMapping("/role")
 @RequiredArgsConstructor
 @Slf4j
 public class RoleController {

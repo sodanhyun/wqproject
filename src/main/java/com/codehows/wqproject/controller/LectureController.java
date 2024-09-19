@@ -17,8 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/lecture")
-@RequestMapping("/api/lecture")
+@RequestMapping("/lecture")
 @RequiredArgsConstructor
 @Slf4j
 public class LectureController {

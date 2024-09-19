@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/api/common")
+@RequestMapping("/common")
 @RequiredArgsConstructor
 @Slf4j
 public class CommonController {
