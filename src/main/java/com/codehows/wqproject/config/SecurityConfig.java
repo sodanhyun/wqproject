@@ -42,7 +42,7 @@ public class SecurityConfig {
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
-    @Value("${frontDomain}")
+    @Value("${domainName}")
     private String frontDomain;
 
     @Bean
