@@ -1,6 +1,7 @@
 package com.codehows.wqproject.entity;
 
-import com.codehows.wqproject.dto.ImageDto;
+import com.codehows.wqproject.auditing.BaseTimeEntity;
+import com.codehows.wqproject.domain.lecture.responseDto.ImageDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;

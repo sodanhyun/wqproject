@@ -19,7 +19,7 @@ public class QLecture extends EntityPathBase<Lecture> {
 
     public static final QLecture lecture = new QLecture("lecture");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.codehows.wqproject.auditing.QBaseEntity _super = new com.codehows.wqproject.auditing.QBaseEntity(this);
 
     public final BooleanPath active = createBoolean("active");
 

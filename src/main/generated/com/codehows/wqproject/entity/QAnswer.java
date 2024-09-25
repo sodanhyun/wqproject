@@ -22,7 +22,7 @@ public class QAnswer extends EntityPathBase<Answer> {
 
     public static final QAnswer answer = new QAnswer("answer");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.codehows.wqproject.auditing.QBaseEntity _super = new com.codehows.wqproject.auditing.QBaseEntity(this);
 
     public final StringPath aCode = createString("aCode");
 

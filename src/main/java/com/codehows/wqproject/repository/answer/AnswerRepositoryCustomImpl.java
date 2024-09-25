@@ -1,6 +1,6 @@
 package com.codehows.wqproject.repository.answer;
 
-import com.codehows.wqproject.dto.AnswerDto;
+import com.codehows.wqproject.domain.answer.requestDto.AnswerDto;
 import com.codehows.wqproject.entity.QAnswer;
 import com.codehows.wqproject.entity.Question;
 import com.querydsl.core.types.Projections;

@@ -1,6 +1,6 @@
 package com.codehows.wqproject.repository.lecture;
 
-import com.codehows.wqproject.dto.LectureListDto;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureListDto;
 import com.codehows.wqproject.entity.Lecture;
 import org.springframework.data.repository.CrudRepository;
 

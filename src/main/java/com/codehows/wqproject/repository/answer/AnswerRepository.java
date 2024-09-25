@@ -1,8 +1,7 @@
 package com.codehows.wqproject.repository.answer;
 
-import com.codehows.wqproject.dto.AnswerDto;
+import com.codehows.wqproject.domain.answer.requestDto.AnswerDto;
 import com.codehows.wqproject.entity.Answer;
-import com.codehows.wqproject.entity.Lecture;
 import com.codehows.wqproject.entity.Question;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

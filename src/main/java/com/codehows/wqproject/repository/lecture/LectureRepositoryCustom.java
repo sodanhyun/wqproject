@@ -1,6 +1,6 @@
 package com.codehows.wqproject.repository.lecture;
 
-import com.codehows.wqproject.dto.LectureListDto;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureListDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,19 +1,17 @@
 package com.codehows.wqproject.config;
 
-import com.codehows.wqproject.constant.Role;
-import com.codehows.wqproject.jwt.JwtAccessDeniedHandler;
-import com.codehows.wqproject.jwt.JwtAuthenticationEntryPoint;
-import com.codehows.wqproject.jwt.JwtFilter;
-import com.codehows.wqproject.jwt.TokenProvider;
-import com.codehows.wqproject.oAuth2.CookieAuthorizationRequestRepository;
-import com.codehows.wqproject.oAuth2.OAuth2AuthenticationFailureHandler;
-import com.codehows.wqproject.oAuth2.OAuth2AuthenticationSuccessHandler;
-import com.codehows.wqproject.oAuth2.CustomOAuth2UserService;
+import com.codehows.wqproject.auth.jwt.JwtAccessDeniedHandler;
+import com.codehows.wqproject.auth.jwt.JwtAuthenticationEntryPoint;
+import com.codehows.wqproject.auth.jwt.JwtAuthenticationFilter;
+import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
+import com.codehows.wqproject.auth.oAuth.OAuth2AuthenticationFailureHandler;
+import com.codehows.wqproject.auth.oAuth.OAuth2AuthenticationSuccessHandler;
+import com.codehows.wqproject.auth.oAuth.CustomOAuth2UserService;
+import com.codehows.wqproject.auth.oAuth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,11 +32,11 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @SuppressWarnings("unchecked")
 public class SecurityConfig {
 
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository cookieAuthorizationRequestRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
@@ -94,7 +92,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(
-                        new JwtFilter(tokenProvider),
+                        new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .authorizeHttpRequests( request -> {

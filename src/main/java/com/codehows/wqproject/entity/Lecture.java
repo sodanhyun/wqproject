@@ -1,12 +1,10 @@
 package com.codehows.wqproject.entity;
 
-import com.codehows.wqproject.dto.LectureDto;
+import com.codehows.wqproject.auditing.BaseEntity;
+import com.codehows.wqproject.domain.lecture.requestDto.LectureDto;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Parameter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
