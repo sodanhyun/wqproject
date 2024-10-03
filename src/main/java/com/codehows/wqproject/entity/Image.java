@@ -1,5 +1,6 @@
 package com.codehows.wqproject.entity;
 
+import com.codehows.wqproject.auditing.BaseTimeEntity;
 import com.codehows.wqproject.dto.ImageDto;
 import jakarta.persistence.*;
 import lombok.*;

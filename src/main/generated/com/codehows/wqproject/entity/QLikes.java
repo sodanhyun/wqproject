@@ -22,7 +22,7 @@ public class QLikes extends EntityPathBase<Likes> {
 
     public static final QLikes likes = new QLikes("likes");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.codehows.wqproject.auditing.QBaseEntity _super = new com.codehows.wqproject.auditing.QBaseEntity(this);
 
     //inherited
     public final StringPath createdBy = _super.createdBy;

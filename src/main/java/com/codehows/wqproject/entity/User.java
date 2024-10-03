@@ -1,0 +1,66 @@
+package com.codehows.wqproject.entity;
+
+import com.codehows.wqproject.auditing.BaseTimeEntity;
+import com.codehows.wqproject.auth.user.Role;
+import com.codehows.wqproject.constant.SocialType;
+import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Entity
+@Table(name = "users")
+@Getter @Setter @ToString
+@NoArgsConstructor
+public class User extends BaseTimeEntity {
+    @Id
+    @Column(name = "user_id")
+    private String id;
+
+    @Column(nullable = false)
+    private String email;
+
+    private String name;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SocialType socialType;
+
+    @Builder
+    public User(String email, String password, String name, Role role, SocialType socialType) {
+        this.id = email + "_" + socialType.getKey();
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.socialType = socialType;
+    }
+
+    public User updateName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public static User create(UserFormDto dto, PasswordEncoder passwordEncoder) {
+        User user = new User();
+        user.setId(dto.getEmail() + "_" + SocialType.OWN.getKey());
+        user.setEmail(dto.getEmail());
+        user.setName(dto.getName());
+        String password = passwordEncoder.encode(dto.getPassword());
+        user.setPassword(password);
+        user.setRole(Role.ADMIN);
+        user.setSocialType(SocialType.OWN);
+        return user;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
+
+}

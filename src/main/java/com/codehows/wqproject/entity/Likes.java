@@ -1,11 +1,9 @@
 package com.codehows.wqproject.entity;
 
+import com.codehows.wqproject.auditing.BaseEntity;
 import com.codehows.wqproject.constant.LikeId;
-import com.codehows.wqproject.dto.QuestionDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "likes")

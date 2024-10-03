@@ -22,7 +22,7 @@ public class QImage extends EntityPathBase<Image> {
 
     public static final QImage image = new QImage("image");
 
-    public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+    public final com.codehows.wqproject.auditing.QBaseTimeEntity _super = new com.codehows.wqproject.auditing.QBaseTimeEntity(this);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

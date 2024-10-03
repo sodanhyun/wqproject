@@ -22,7 +22,7 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public static final QQuestion question = new QQuestion("question");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.codehows.wqproject.auditing.QBaseEntity _super = new com.codehows.wqproject.auditing.QBaseEntity(this);
 
     public final NumberPath<Integer> answerCount = createNumber("answerCount", Integer.class);
 
@@ -35,7 +35,7 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final NumberPath<Integer> likesCount = createNumber("likesCount", Integer.class);
 
-    public final QMember member;
+    public final QUser member;
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
@@ -71,7 +71,7 @@ public class QQuestion extends EntityPathBase<Question> {
     public QQuestion(Class<? extends Question> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.lecture = inits.isInitialized("lecture") ? new QLecture(forProperty("lecture")) : null;
-        this.member = inits.isInitialized("member") ? new QMember(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new QUser(forProperty("member")) : null;
     }
 
 }

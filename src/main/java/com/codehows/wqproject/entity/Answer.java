@@ -1,7 +1,6 @@
 package com.codehows.wqproject.entity;
 
-import com.codehows.wqproject.dto.AnswerDto;
-import com.codehows.wqproject.dto.QuestionDto;
+import com.codehows.wqproject.auditing.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;

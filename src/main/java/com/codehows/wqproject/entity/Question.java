@@ -1,14 +1,11 @@
 package com.codehows.wqproject.entity;
 
+import com.codehows.wqproject.auditing.BaseEntity;
 import com.codehows.wqproject.dto.QuestionDto;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
-import org.hibernate.annotations.Parameter;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "question")
@@ -26,7 +23,7 @@ public class Question extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User member;
 
     @Formula("(SELECT count(1) FROM answer a WHERE a.q_code = q_code)")
     private Integer answerCount;
@@ -42,7 +39,7 @@ public class Question extends BaseEntity {
     private Boolean pick;
 
     @Builder
-    Question(String qCode, Lecture lecture, Member member,
+    Question(String qCode, Lecture lecture, User member,
              String name, String content, Boolean pick) {
         this.qCode = qCode;
         this.lecture = lecture;
