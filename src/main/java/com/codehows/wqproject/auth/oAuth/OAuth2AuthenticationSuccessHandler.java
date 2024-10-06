@@ -2,7 +2,7 @@ package com.codehows.wqproject.auth.oAuth;
 
 import com.codehows.wqproject.auth.jwt.JwtRefreshTokenService;
 import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
-import com.codehows.wqproject.constant.SocialType;
+import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.domain.auth.responseDto.TokenResponse;
 import com.codehows.wqproject.domain.auth.service.impl.AuthService;
 import com.codehows.wqproject.entity.User;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.codehows.wqproject.auth.jwt.JwtTokenConstant.*;
+import static com.codehows.wqproject.constant.JwtTokenConstant.*;
 
 @RequiredArgsConstructor
 @Component
@@ -46,8 +46,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         User user = authService.findById(userId);
         String refreshToken = refreshTokenService.createNewToken(user);
         addRefreshTokenToCookie(request, response, refreshToken);
-        String accessToken = tokenProvider.createAccessToken(user);
-        String targetUrl = getTargetUrl(request, new TokenResponse(accessToken, refreshToken, user.getRole().getKey()));
+        String accessToken = tokenProvider.createJwtToken(user, "access");
+        String targetUrl = getTargetUrl(request, new TokenResponse(accessToken, refreshToken, user.getUserRole().getType()));
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -68,11 +68,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private String getUserId(SocialType type, Map<String, Object> attributes) {
         if(type== SocialType.GOOGLE) {
-            return attributes.get("email") + "_" + SocialType.GOOGLE.getKey();
+            return attributes.get("email") + "_" + SocialType.GOOGLE.getType();
 
         }else if(type== SocialType.KAKAO) {
             if(attributes.get("kakao_account") instanceof Map<?, ?> kakaoAccount)
-                return kakaoAccount.get("email") + "_" + SocialType.KAKAO.getKey();
+                return kakaoAccount.get("email") + "_" + SocialType.KAKAO.getType();
         }
         return null;
     }

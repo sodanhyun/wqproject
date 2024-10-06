@@ -1,22 +1,18 @@
 package com.codehows.wqproject.auth.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.codehows.wqproject.auth.jwt.JwtTokenConstant.HEADER_AUTHORIZATION;
-import static com.codehows.wqproject.auth.jwt.JwtTokenConstant.TOKEN_PREFIX;
+import static com.codehows.wqproject.constant.JwtTokenConstant.HEADER_AUTHORIZATION;
+import static com.codehows.wqproject.constant.JwtTokenConstant.TOKEN_PREFIX;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

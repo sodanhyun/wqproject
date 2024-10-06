@@ -1,8 +1,10 @@
 package com.codehows.wqproject.auth.user;
 
+import com.codehows.wqproject.constant.enumVal.UserRole;
 import com.codehows.wqproject.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,20 +16,16 @@ import java.util.*;
 
 @Getter
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class UserDetail implements OAuth2User, UserDetails, Serializable {
-    private User user;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final User user;
+    private final Collection<? extends GrantedAuthority> authorities;
     @Setter
     private Map<String, Object> attributes;
 
-    public UserDetail(User user, Collection<? extends GrantedAuthority> authorities) {
-        this.user = user;
-        this.authorities = authorities;
-    }
-
     public static UserDetail create(User member) {
         List<GrantedAuthority> authorities =
-                Collections.singletonList(new SimpleGrantedAuthority("" + Role.USER));
+                Collections.singletonList(new SimpleGrantedAuthority("" + UserRole.USER));
         return new UserDetail(
                 member,
                 authorities,
@@ -69,8 +67,5 @@ public class UserDetail implements OAuth2User, UserDetails, Serializable {
     }
 
     @Override
-    public boolean isEnabled() {
-        //이메일이 인증되어 있고 계정이 잠겨있지 않으면 true
-        return true;
-    }
+    public boolean isEnabled() {return true;}
 }

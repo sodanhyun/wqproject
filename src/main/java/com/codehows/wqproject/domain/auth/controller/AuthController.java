@@ -3,8 +3,6 @@ package com.codehows.wqproject.domain.auth.controller;
 import com.codehows.wqproject.domain.auth.requestDto.LoginDto;
 import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
 import com.codehows.wqproject.domain.auth.responseDto.TokenResponse;
-import com.codehows.wqproject.dto.TokenDto;
-import com.codehows.wqproject.auth.jwt.JwtAuthenticationFilter;
 import com.codehows.wqproject.domain.auth.service.impl.AuthService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-import static com.codehows.wqproject.auth.jwt.JwtTokenConstant.HEADER_AUTHORIZATION;
+import static com.codehows.wqproject.constant.JwtTokenConstant.HEADER_AUTHORIZATION;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid UserFormDto userFormDto) {
+    public ResponseEntity<?> signup(@Valid @RequestBody UserFormDto userFormDto) {
         try{
             authService.signup(userFormDto);
             return ResponseEntity.ok().build();
@@ -56,7 +54,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authorize(@Valid LoginDto loginDto) {
+    public ResponseEntity<?> authorize(@Valid @RequestBody LoginDto loginDto) {
         try{
             HashMap<String, Object> result = authService.signin(loginDto);
             TokenResponse tokenDto = (TokenResponse)(result.get("tokenDto"));

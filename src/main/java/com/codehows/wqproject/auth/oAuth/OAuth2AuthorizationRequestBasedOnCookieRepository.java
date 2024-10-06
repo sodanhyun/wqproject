@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
-import static com.codehows.wqproject.auth.jwt.JwtTokenConstant.*;
+import static com.codehows.wqproject.constant.JwtTokenConstant.*;
 
 @Component
 public class OAuth2AuthorizationRequestBasedOnCookieRepository

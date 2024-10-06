@@ -34,7 +34,7 @@ public class LectureController {
     }
 
     @PostMapping(value = "/regist")
-    public ResponseEntity<?> regLecture(@RequestPart(value = "post") LectureDto lectureDto,
+    public ResponseEntity<?> regLecture(@RequestPart(value = "data") LectureDto lectureDto,
                                         @RequestPart(value = "image", required = false) MultipartFile img) {
         lectureService.regist(lectureDto, img);
         return ResponseEntity.ok().build();
@@ -57,7 +57,7 @@ public class LectureController {
 
     @PatchMapping("/{code}")
     public ResponseEntity<LectureDto> lectureUpdate(@PathVariable String code,
-                                                    @RequestPart(value = "post") LectureDto lectureDto,
+                                                    @RequestPart(value = "data") LectureDto lectureDto,
                                                     @RequestPart(value = "image", required = false) MultipartFile img) {
         lectureService.update(code, lectureDto, img);
         return ResponseEntity.ok().build();

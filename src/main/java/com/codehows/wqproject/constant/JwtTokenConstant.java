@@ -1,4 +1,4 @@
-package com.codehows.wqproject.auth.jwt;
+package com.codehows.wqproject.constant;
 
 import com.codehows.wqproject.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;

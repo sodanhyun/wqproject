@@ -1,4 +1,4 @@
-package com.codehows.wqproject.auth.jwt;
+package com.codehows.wqproject.constant;
 
 import lombok.Getter;
 import lombok.Setter;

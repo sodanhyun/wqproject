@@ -63,19 +63,19 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         User user = userRepository.findById(authentication.getName()).orElseThrow(EntityNotFoundException::new);
-        String accessToken = tokenProvider.createAccessToken(user);
+        String accessToken = tokenProvider.createJwtToken(user, "access");
         RefreshToken refreshToken = refreshTokenRepository.findByUser(user).orElse(null);
         if(refreshToken == null) {
-            refreshToken = new RefreshToken(user, tokenProvider.createRefreshToken());
+            refreshToken = new RefreshToken(user, tokenProvider.createJwtToken(user, "refresh"));
             refreshTokenRepository.save(refreshToken);
         }else {
             refreshToken.update(refreshToken.getValue());
         }
-        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken.getValue(), user.getRole().getKey());
+        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken.getValue(), user.getUserRole().getType());
         HashMap<String, Object> result = new HashMap<>();
         result.put("tokenDto", tokenResponse);
         result.put("memberId", user.getId());
-        result.put("role", user.getRole());
+        result.put("role", user.getUserRole());
         return result;
     }
 

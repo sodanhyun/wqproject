@@ -25,7 +25,7 @@ public class JwtRefreshTokenService {
     }
 
     public String createNewToken(User user) {
-        String newRefreshToken = tokenProvider.createRefreshToken();
+        String newRefreshToken = tokenProvider.createJwtToken(user, "refresh");
         RefreshToken existRefreshToken = findByUser(user);
         if(existRefreshToken == null) {
             refreshTokenRepository.save(new RefreshToken(user, newRefreshToken));

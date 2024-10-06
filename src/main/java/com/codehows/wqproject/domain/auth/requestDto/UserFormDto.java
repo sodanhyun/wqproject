@@ -1,6 +1,6 @@
 package com.codehows.wqproject.domain.auth.requestDto;
 
-import com.codehows.wqproject.constant.SocialType;
+import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -47,7 +47,7 @@ public class UserFormDto {
     }
 
     public void setEmail(String email) {
-        this.id = email + "_" + SocialType.OWN.getKey();
+        this.id = email + "_" + SocialType.OWN.getType();
         this.email = email;
     }
 }

@@ -1,5 +1,6 @@
 package com.codehows.wqproject.auth.user;
 
+import com.codehows.wqproject.constant.enumVal.UserRole;
 import com.codehows.wqproject.entity.User;
 import com.codehows.wqproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,9 @@ public class UserDetailService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        Role role = user.getRole();
+        UserRole userRole = user.getUserRole();
 
-        authorities.add(new SimpleGrantedAuthority(role.getKey()));
+        authorities.add(new SimpleGrantedAuthority(userRole.getType()));
 
         return authorities;
     }

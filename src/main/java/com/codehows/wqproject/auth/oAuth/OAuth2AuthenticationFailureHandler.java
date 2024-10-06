@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
-import static com.codehows.wqproject.auth.jwt.JwtTokenConstant.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.codehows.wqproject.constant.JwtTokenConstant.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 @RequiredArgsConstructor

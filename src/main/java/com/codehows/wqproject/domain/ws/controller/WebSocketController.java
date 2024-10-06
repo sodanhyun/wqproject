@@ -5,7 +5,7 @@ import com.codehows.wqproject.dto.AnswerDto;
 import com.codehows.wqproject.dto.QuestionDto;
 import com.codehows.wqproject.domain.answer.service.impl.AnswerService;
 import com.codehows.wqproject.domain.question.service.impl.QuestionService;
-import com.codehows.wqproject.domain.account.service.impl.RoleService;
+import com.codehows.wqproject.domain.account.service.impl.AccountServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class WebSocketController {
     private final QuestionService questionService;
     private final JwtTokenProvider tokenProvider;
     private final AnswerService answerService;
-    private final RoleService roleService;
+    private final AccountServiceImpl accountServiceImpl;
 
     private static final ConcurrentHashMap<String, String> CLIENTS = new ConcurrentHashMap<>();
 

@@ -1,8 +1,8 @@
 package com.codehows.wqproject.entity;
 
 import com.codehows.wqproject.auditing.BaseTimeEntity;
-import com.codehows.wqproject.auth.user.Role;
-import com.codehows.wqproject.constant.SocialType;
+import com.codehows.wqproject.constant.enumVal.UserRole;
+import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,20 +25,22 @@ public class User extends BaseTimeEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Convert(converter =  UserRole.Converter.class)
     @Column(nullable = false)
-    private Role role;
+    private UserRole userRole;
 
     @Enumerated(EnumType.STRING)
+    @Convert(converter =  SocialType.Converter.class)
     @Column(nullable = false)
     private SocialType socialType;
 
     @Builder
-    public User(String email, String password, String name, Role role, SocialType socialType) {
-        this.id = email + "_" + socialType.getKey();
+    public User(String email, String password, String name, UserRole userRole, SocialType socialType) {
+        this.id = email + "_" + socialType.getType();
         this.email = email;
         this.name = name;
         this.password = password;
-        this.role = role;
+        this.userRole = userRole;
         this.socialType = socialType;
     }
 
@@ -49,18 +51,18 @@ public class User extends BaseTimeEntity {
 
     public static User create(UserFormDto dto, PasswordEncoder passwordEncoder) {
         User user = new User();
-        user.setId(dto.getEmail() + "_" + SocialType.OWN.getKey());
+        user.setId(dto.getEmail() + "_" + SocialType.OWN.getType());
         user.setEmail(dto.getEmail());
         user.setName(dto.getName());
         String password = passwordEncoder.encode(dto.getPassword());
         user.setPassword(password);
-        user.setRole(Role.ADMIN);
+        user.setUserRole(UserRole.TEMP);
         user.setSocialType(SocialType.OWN);
         return user;
     }
 
-    public void updateRole(Role role) {
-        this.role = role;
+    public void updateRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
 }

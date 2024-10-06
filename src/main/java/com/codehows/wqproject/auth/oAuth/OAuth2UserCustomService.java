@@ -1,7 +1,7 @@
 package com.codehows.wqproject.auth.oAuth;
 
-import com.codehows.wqproject.auth.user.Role;
-import com.codehows.wqproject.constant.SocialType;
+import com.codehows.wqproject.constant.enumVal.UserRole;
+import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.entity.User;
 import com.codehows.wqproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                     .orElse(User.builder()
                             .email(email)
                             .name(name)
-                            .role(Role.USER)
+                            .userRole(UserRole.USER)
                             .socialType(SocialType.KAKAO)
                             .build());
             userRepository.save(user);
@@ -56,7 +56,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                 .orElse(User.builder()
                         .email(email)
                         .name(name)
-                        .role(Role.USER)
+                        .userRole(UserRole.USER)
                         .socialType(SocialType.GOOGLE)
                         .build());
         userRepository.save(user);

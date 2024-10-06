@@ -32,12 +32,12 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
-    public final EnumPath<com.codehows.wqproject.auth.user.Role> role = createEnum("role", com.codehows.wqproject.auth.user.Role.class);
-
-    public final EnumPath<com.codehows.wqproject.constant.SocialType> socialType = createEnum("socialType", com.codehows.wqproject.constant.SocialType.class);
+    public final EnumPath<com.codehows.wqproject.constant.enumVal.SocialType> socialType = createEnum("socialType", com.codehows.wqproject.constant.enumVal.SocialType.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+
+    public final EnumPath<com.codehows.wqproject.constant.enumVal.UserRole> userRole = createEnum("userRole", com.codehows.wqproject.constant.enumVal.UserRole.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));
