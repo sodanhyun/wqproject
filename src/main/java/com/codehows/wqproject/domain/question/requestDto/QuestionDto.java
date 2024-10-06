@@ -1,6 +1,5 @@
-package com.codehows.wqproject.dto;
+package com.codehows.wqproject.domain.question.requestDto;
 
-import com.codehows.wqproject.entity.Lecture;
 import com.codehows.wqproject.entity.Question;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;

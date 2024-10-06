@@ -1,8 +1,8 @@
 package com.codehows.wqproject.domain.ws.controller;
 
 import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
-import com.codehows.wqproject.dto.AnswerDto;
-import com.codehows.wqproject.dto.QuestionDto;
+import com.codehows.wqproject.domain.answer.requestDto.AnswerDto;
+import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
 import com.codehows.wqproject.domain.answer.service.impl.AnswerService;
 import com.codehows.wqproject.domain.question.service.impl.QuestionService;
 import com.codehows.wqproject.domain.account.service.impl.AccountServiceImpl;

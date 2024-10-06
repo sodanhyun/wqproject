@@ -30,12 +30,9 @@ public class FileHandler {
         return saveFileName;
     }
 
-    public void deleteFile(String filePath) throws Exception {
+    public void deleteFile(String filePath) {
         File deleteFile = new File(filePath);
-        if(deleteFile.exists()) {
-            deleteFile.delete();
-            log.info("기존 파일 삭제됨");
-        }
+        if(deleteFile.exists()) deleteFile.delete();
     }
 
 }

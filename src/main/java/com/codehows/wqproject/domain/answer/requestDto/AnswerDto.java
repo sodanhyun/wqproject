@@ -1,7 +1,6 @@
-package com.codehows.wqproject.dto;
+package com.codehows.wqproject.domain.answer.requestDto;
 
 import com.codehows.wqproject.entity.Answer;
-import com.codehows.wqproject.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

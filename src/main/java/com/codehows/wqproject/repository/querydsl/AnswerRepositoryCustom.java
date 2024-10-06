@@ -1,6 +1,6 @@
 package com.codehows.wqproject.repository.querydsl;
 
-import com.codehows.wqproject.dto.AnswerDto;
+import com.codehows.wqproject.domain.answer.requestDto.AnswerDto;
 import com.codehows.wqproject.entity.Question;
 
 import java.util.List;

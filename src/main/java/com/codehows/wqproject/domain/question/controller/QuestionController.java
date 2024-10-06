@@ -1,8 +1,8 @@
 package com.codehows.wqproject.domain.question.controller;
 
-import com.codehows.wqproject.dto.LectureDto;
-import com.codehows.wqproject.dto.QuestionDto;
-import com.codehows.wqproject.domain.lecture.service.impl.LectureService;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
+import com.codehows.wqproject.domain.lecture.service.LectureService;
+import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
 import com.codehows.wqproject.domain.question.service.impl.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class QuestionController {
 
     @GetMapping("/active/{lCode}")
     public ResponseEntity<Boolean> activeCheck(@PathVariable String lCode) {
-        LectureDto lectureDto = lectureService.findLecture(lCode);
-        return ResponseEntity.ok().body(lectureDto.getActive());
+        LectureRes res = lectureService.findOne(lCode);
+        return ResponseEntity.ok().body(res.getActive());
     }
 }

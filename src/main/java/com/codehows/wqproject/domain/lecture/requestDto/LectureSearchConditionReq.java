@@ -1,4 +1,4 @@
-package com.codehows.wqproject.dto;
+package com.codehows.wqproject.domain.lecture.requestDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LectureListConditionDto {
+public class LectureSearchConditionReq {
 
     private String keyword;
 

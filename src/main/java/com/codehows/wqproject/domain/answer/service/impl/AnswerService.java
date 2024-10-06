@@ -1,6 +1,6 @@
 package com.codehows.wqproject.domain.answer.service.impl;
 
-import com.codehows.wqproject.dto.AnswerDto;
+import com.codehows.wqproject.domain.answer.requestDto.AnswerDto;
 import com.codehows.wqproject.entity.Answer;
 import com.codehows.wqproject.entity.Question;
 import com.codehows.wqproject.repository.AnswerRepository;

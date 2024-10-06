@@ -1,6 +1,7 @@
 package com.codehows.wqproject.domain.account.service.impl;
 
 import com.codehows.wqproject.constant.enumVal.UserRole;
+import com.codehows.wqproject.domain.account.responseDto.AccountInfoRes;
 import com.codehows.wqproject.domain.account.service.AccountService;
 import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
 import com.codehows.wqproject.entity.User;
@@ -34,10 +35,10 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserFormDto> getUsers() {
+    public List<AccountInfoRes> getUsers() {
         return userRepository.authorityEdit()
                 .stream()
-                .map(UserFormDto::of)
+                .map(AccountInfoRes::of)
                 .toList();
     }
 

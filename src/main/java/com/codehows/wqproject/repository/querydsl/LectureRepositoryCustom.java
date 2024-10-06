@@ -1,6 +1,6 @@
 package com.codehows.wqproject.repository.querydsl;
 
-import com.codehows.wqproject.dto.LectureListDto;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,6 +8,6 @@ import java.util.List;
 public interface LectureRepositoryCustom {
 
     String findMaxKey();
-    List<LectureListDto> findAllList();
-    List<LectureListDto> searchList(String keyword, LocalDateTime sdate, LocalDateTime edate);
+    List<LectureRes> findAllList();
+    List<LectureRes> searchList(String keyword, LocalDateTime sdate, LocalDateTime edate);
 }

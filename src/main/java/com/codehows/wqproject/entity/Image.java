@@ -1,7 +1,7 @@
 package com.codehows.wqproject.entity;
 
 import com.codehows.wqproject.auditing.BaseTimeEntity;
-import com.codehows.wqproject.dto.ImageDto;
+import com.codehows.wqproject.domain.lecture.requestDto.ImageReq;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -35,7 +35,7 @@ public class Image extends BaseTimeEntity {
         this.imgUrl = imgUrl;
     }
 
-    public static Image createImage(ImageDto imageDto, Lecture lecture) {
+    public static Image createImage(ImageReq imageDto, Lecture lecture) {
         return Image.builder()
                 .lecture(lecture)
                 .oriImgName(imageDto.getOriImgName())

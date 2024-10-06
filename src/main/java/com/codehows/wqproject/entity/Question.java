@@ -1,7 +1,7 @@
 package com.codehows.wqproject.entity;
 
 import com.codehows.wqproject.auditing.BaseEntity;
-import com.codehows.wqproject.dto.QuestionDto;
+import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;

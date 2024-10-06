@@ -1,13 +1,11 @@
 package com.codehows.wqproject.repository.querydsl.impl;
 
-import com.codehows.wqproject.dto.AnswerDto;
-import com.codehows.wqproject.entity.QAnswer;
+import com.codehows.wqproject.domain.answer.requestDto.AnswerDto;
 import com.codehows.wqproject.entity.Question;
 import com.codehows.wqproject.repository.querydsl.AnswerRepositoryCustom;
 import com.codehows.wqproject.repository.querydsl.Querydsl4RepositorySupport;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 

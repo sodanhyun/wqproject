@@ -1,6 +1,5 @@
 package com.codehows.wqproject.repository;
 
-import com.codehows.wqproject.dto.AnswerDto;
 import com.codehows.wqproject.entity.Answer;
 import com.codehows.wqproject.entity.Question;
 import com.codehows.wqproject.repository.querydsl.AnswerRepositoryCustom;

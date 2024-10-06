@@ -76,17 +76,16 @@ public class SecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests( request -> request
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                        .requestMatchers(antMatcher("/images/**")).permitAll()
                         .requestMatchers(antMatcher("/question/**")).hasAnyRole("ADMIN", "USER")
                         .requestMatchers(antMatcher("/lecture/*")).hasAnyRole("ADMIN")
-                        .requestMatchers(antMatcher("/lecture/limit/*")).permitAll()
                         .requestMatchers(antMatcher("/role/**")).hasRole("ADMIN")
-//                            .requestMatchers(new MvcRequestMatcher(introspector, "/lecture/info/**")).hasAnyRole("ADMIN")
+                        .requestMatchers(antMatcher("/lecture/image/*")).permitAll()
+                        .requestMatchers(antMatcher("/lecture/limit/*")).permitAll()
                         .requestMatchers(antMatcher("/favicon.ico")).permitAll()
-                        .requestMatchers(antMatcher("/image/**")).permitAll()
                         .requestMatchers(antMatcher("/auth/**")).permitAll()
                         .requestMatchers(antMatcher("/oauth2/**")).permitAll()
                         .requestMatchers(antMatcher("/ws")).permitAll()
-//                        .requestMatchers(antMatcher("/**")).permitAll()
                         .anyRequest().authenticated())
                 .build();
     }

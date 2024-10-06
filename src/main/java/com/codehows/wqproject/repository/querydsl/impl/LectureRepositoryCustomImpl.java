@@ -1,14 +1,12 @@
 package com.codehows.wqproject.repository.querydsl.impl;
 
-import com.codehows.wqproject.dto.LectureListDto;
-import com.codehows.wqproject.dto.QLectureListDto;
-import com.codehows.wqproject.entity.QLecture;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
 import com.codehows.wqproject.repository.querydsl.LectureRepositoryCustom;
 import com.codehows.wqproject.repository.querydsl.Querydsl4RepositorySupport;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,8 +41,13 @@ public class LectureRepositoryCustomImpl extends Querydsl4RepositorySupport impl
     }
 
     @Override
-    public List<LectureListDto> findAllList() {
-        return select(new QLectureListDto(lecture.lCode, lecture.title, lecture.sdate, lecture.edate, lecture.active))
+    public List<LectureRes> findAllList() {
+        return select(Projections.fields(LectureRes.class,
+                    lecture.lCode,
+                    lecture.title,
+                    lecture.sdate,
+                    lecture.edate,
+                    lecture.active))
                 .from(lecture)
                 .where(lecture.edate.goe(LocalDateTime.now().minusMonths(1)))
                 .orderBy(lecture.sdate.desc())
@@ -52,31 +55,51 @@ public class LectureRepositoryCustomImpl extends Querydsl4RepositorySupport impl
     }
 
     @Override
-    public List<LectureListDto> searchList(String keyword, LocalDateTime sdate, LocalDateTime edate) {
+    public List<LectureRes> searchList(String keyword, LocalDateTime sdate, LocalDateTime edate) {
         LocalDateTime startDate = sdate == null ? LocalDateTime.MIN : sdate;
         LocalDateTime endDate = edate == null ? LocalDateTime.now() : edate;
 
         if(keyword == null || keyword.isEmpty()) {
             if(sdate == null && edate == null) {
-                return select(new QLectureListDto(lecture.lCode, lecture.title, lecture.sdate, lecture.edate, lecture.active))
+                return select(Projections.fields(LectureRes.class,
+                            lecture.lCode,
+                            lecture.title,
+                            lecture.sdate,
+                            lecture.edate,
+                            lecture.active))
                         .from(lecture)
                         .orderBy(lecture.edate.desc())
                         .fetch();
             }
-            return select(new QLectureListDto(lecture.lCode, lecture.title, lecture.sdate, lecture.edate, lecture.active))
+            return select(Projections.fields(LectureRes.class,
+                        lecture.lCode,
+                        lecture.title,
+                        lecture.sdate,
+                        lecture.edate,
+                        lecture.active))
                     .from(lecture)
                     .where(searchDateFilter(startDate, endDate))
                     .orderBy(lecture.edate.desc())
                     .fetch();
         }else {
             if(sdate == null && edate == null) {
-                return select(new QLectureListDto(lecture.lCode, lecture.title, lecture.sdate, lecture.edate, lecture.active))
+                return select(Projections.fields(LectureRes.class,
+                            lecture.lCode,
+                            lecture.title,
+                            lecture.sdate,
+                            lecture.edate,
+                            lecture.active))
                         .from(lecture)
                         .where(searchKeywordFilter(keyword))
                         .orderBy(lecture.edate.desc())
                         .fetch();
             }
-            return select(new QLectureListDto(lecture.lCode, lecture.title, lecture.sdate, lecture.edate, lecture.active))
+            return select(Projections.fields(LectureRes.class,
+                        lecture.lCode,
+                        lecture.title,
+                        lecture.sdate,
+                        lecture.edate,
+                        lecture.active))
                     .from(lecture)
                     .where(searchKeywordFilter(keyword)
                             .and(searchDateFilter(startDate, endDate)))

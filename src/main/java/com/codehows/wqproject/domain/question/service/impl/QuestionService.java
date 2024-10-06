@@ -1,7 +1,7 @@
 package com.codehows.wqproject.domain.question.service.impl;
 
 import com.codehows.wqproject.constant.LikeId;
-import com.codehows.wqproject.dto.QuestionDto;
+import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
 import com.codehows.wqproject.entity.*;
 import com.codehows.wqproject.repository.LikesRepository;
 import com.codehows.wqproject.repository.AnswerRepository;

@@ -1,9 +1,11 @@
 package com.codehows.wqproject.domain.lecture.controller;
 
-import com.codehows.wqproject.dto.LectureDto;
-import com.codehows.wqproject.dto.LectureListConditionDto;
-import com.codehows.wqproject.dto.LectureListDto;
-import com.codehows.wqproject.domain.lecture.service.impl.LectureService;
+import com.codehows.wqproject.domain.lecture.requestDto.LectureActiveReq;
+import com.codehows.wqproject.domain.lecture.requestDto.LectureReq;
+import com.codehows.wqproject.domain.lecture.requestDto.LectureSearchConditionReq;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureLimitRes;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
+import com.codehows.wqproject.domain.lecture.service.LectureService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -24,61 +25,70 @@ public class LectureController {
     private final LectureService lectureService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<LectureListDto>> lectureList() {
-        return ResponseEntity.ok().body(lectureService.allList());
+    public ResponseEntity<?> list() {
+        List<LectureRes> res = lectureService.getList();
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping("/filteredList")
-    public ResponseEntity<List<LectureListDto>> lectureListUpload(LectureListConditionDto dto) {
-        return ResponseEntity.ok().body(lectureService.findFilteredList(dto));
+    public ResponseEntity<?> filteredList(LectureSearchConditionReq req) {
+        List<LectureRes> res = lectureService.getFilteredList(req);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping(value = "/regist")
-    public ResponseEntity<?> regLecture(@RequestPart(value = "data") LectureDto lectureDto,
+    public ResponseEntity<?> regist(@RequestPart(value = "data") LectureReq req,
                                         @RequestPart(value = "image", required = false) MultipartFile img) {
-        lectureService.regist(lectureDto, img);
-        return ResponseEntity.ok().build();
+        lectureService.regist(req, img);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<?> lectureDetail(@PathVariable String code) {
+    public ResponseEntity<?> detail(@PathVariable String code) {
         try {
-            return ResponseEntity.ok().body(lectureService.findLecture(code));
+            LectureRes res = lectureService.findOne(code);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (EntityNotFoundException e) {
             return new ResponseEntity<>("해당 강의를 찾을 수 없습니다.", HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 
     @DeleteMapping("/{code}")
-    public ResponseEntity<?> lectureDelete(@PathVariable String code) {
+    public ResponseEntity<?> delete(@PathVariable String code) {
         lectureService.delete(code);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/{code}")
-    public ResponseEntity<LectureDto> lectureUpdate(@PathVariable String code,
-                                                    @RequestPart(value = "data") LectureDto lectureDto,
-                                                    @RequestPart(value = "image", required = false) MultipartFile img) {
-        lectureService.update(code, lectureDto, img);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> update(@PathVariable String code,
+                                           @RequestPart(value = "data") LectureReq req,
+                                           @RequestPart(value = "image", required = false) MultipartFile img) {
+        lectureService.update(code, req, img);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/active")
-    public ResponseEntity<String> lectureActive(LectureDto lectureDto) {
-        return ResponseEntity.ok().body(lectureService.setOrInit(lectureDto.getLCode(), lectureDto.getActive()).toString());
+    public ResponseEntity<?> setActive(LectureActiveReq req) {
+        String res = lectureService.updateActive(req.getLCode(), req.getActive());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/limit/{lCode}")
-    public ResponseEntity<?> lectureLimit(@PathVariable String lCode) {
-        HashMap<String, Object> result = new HashMap<>();
+    public ResponseEntity<?> limit(@PathVariable String lCode) {
         try {
-            LectureDto lectureDto = lectureService.findLecture(lCode);
-            result.put("title", lectureDto.getTitle());
-            result.put("limitMin", lectureDto.getLimitMin());
-            result.put("active", lectureDto.getActive());
-            return ResponseEntity.ok().body(result);
+            LectureLimitRes res = lectureService.getLimitInfo(lCode);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (EntityNotFoundException e) {
             return new ResponseEntity<>("해당 강의를 찾을 수 없습니다.", HttpStatus.METHOD_NOT_ALLOWED);
+        }
+    }
+
+    @GetMapping("/image/{code}")
+    public ResponseEntity<?> lectureImage(@PathVariable String code) {
+        try{
+            return ResponseEntity.ok().body(lectureService.lectureImage(code));
+        }catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("해당 이미지를 찾을 수 없습니다.", HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
     

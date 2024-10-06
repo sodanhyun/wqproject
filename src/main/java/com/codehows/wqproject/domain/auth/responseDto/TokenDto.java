@@ -1,4 +1,4 @@
-package com.codehows.wqproject.dto;
+package com.codehows.wqproject.domain.auth.responseDto;
 
 import lombok.*;
 
