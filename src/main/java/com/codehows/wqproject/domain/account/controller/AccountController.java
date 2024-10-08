@@ -46,7 +46,7 @@ public class AccountController {
 
     @DeleteMapping("/delete/{memberId}")
     public ResponseEntity<?> delete(@PathVariable String memberId) {
-        accountService.deleteMember(memberId);
+        accountService.deleteUser(memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

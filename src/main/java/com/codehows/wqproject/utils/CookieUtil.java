@@ -45,10 +45,15 @@ public class CookieUtil {
         if(cookies==null) return;
         for(Cookie cookie : cookies) {
             if(name.equals(cookie.getName())) {
-                cookie.setValue("");
-                cookie.setPath("/");
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
+                response.addHeader(HttpHeaders.SET_COOKIE,
+                        ResponseCookie.from(name, "")
+                                .path("/")
+                                .sameSite("None")
+                                .secure(true)
+                                .httpOnly(true)
+                                .maxAge(0)
+                                .build()
+                                .toString());
             }
         }
     }

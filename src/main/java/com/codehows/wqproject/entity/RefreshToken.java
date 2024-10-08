@@ -25,6 +25,7 @@ public class RefreshToken {
     @Column
     private String value;
 
+    @Builder
     public RefreshToken(User user, String value) {
         this.user = user;
         this.value = value;

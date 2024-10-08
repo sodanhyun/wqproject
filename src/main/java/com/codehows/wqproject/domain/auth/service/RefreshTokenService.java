@@ -6,5 +6,6 @@ public interface RefreshTokenService {
 
     public RefreshToken findByUserId(String userId);
     public RefreshToken updateRefreshToken(String userId, String newRefreshToken);
+    public void invalidByUserId(String userId);
 
 }

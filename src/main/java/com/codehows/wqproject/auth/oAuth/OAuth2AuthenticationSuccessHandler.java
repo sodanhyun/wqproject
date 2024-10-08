@@ -1,10 +1,9 @@
 package com.codehows.wqproject.auth.oAuth;
 
-import com.codehows.wqproject.domain.auth.service.impl.RefreshTokenServiceImpl;
+import com.codehows.wqproject.domain.account.service.AccountService;
 import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
 import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
-import com.codehows.wqproject.domain.auth.service.impl.AuthServiceImpl;
 import com.codehows.wqproject.entity.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +30,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String domainName;
 
     private final JwtTokenProvider tokenProvider;
-    private final RefreshTokenServiceImpl refreshTokenService;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-    private final AuthServiceImpl authServiceImpl;
+    private final AccountService accountService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -43,7 +41,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> attributes = oAuth2User.getAttributes();
         SocialType type = getOAuthType(Objects.requireNonNull(WebUtils.getCookie(request, TYPE)).getValue());
         String userId = getUserId(type, attributes);
-        User user = authServiceImpl.findById(userId);
+        User user = accountService.findUserById(userId);
         String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
         addRefreshTokenToCookie(request, response, refreshToken);
         String accessToken = tokenProvider.createJwtToken(user.getId(), "access");

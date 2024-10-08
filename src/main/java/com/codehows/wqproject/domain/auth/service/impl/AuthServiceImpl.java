@@ -1,8 +1,13 @@
 package com.codehows.wqproject.domain.auth.service.impl;
 
 import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
+import com.codehows.wqproject.constant.enumVal.SocialType;
+import com.codehows.wqproject.constant.enumVal.UserRole;
 import com.codehows.wqproject.domain.auth.requestDto.LoginDto;
 import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
+import com.codehows.wqproject.domain.auth.service.AuthService;
+import com.codehows.wqproject.domain.auth.service.RefreshTokenService;
+import com.codehows.wqproject.entity.RefreshToken;
 import com.codehows.wqproject.entity.User;
 import com.codehows.wqproject.repository.RefreshTokenRepository;
 import com.codehows.wqproject.repository.UserRepository;
@@ -21,12 +26,13 @@ import java.util.*;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final RefreshTokenService refreshTokenService;
 
 //    public HashMap<String, Object> tempSignin() throws EntityNotFoundException {
 //        UserFormDto tempWsUser = UserFormDto.builder()
@@ -53,12 +59,24 @@ public class AuthServiceImpl {
         User user = userRepository.findById(authentication.getName()).orElseThrow(EntityNotFoundException::new);
         String accessToken = tokenProvider.createJwtToken(user.getId(), "access");
         String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
+        RefreshToken refreshToken1 = refreshTokenRepository.findByUser(user)
+                .orElse(RefreshToken.builder()
+                        .user(user)
+                        .value(refreshToken)
+                        .build()
+                );
+        refreshToken1.update(refreshToken);
+        refreshTokenRepository.save(refreshToken1);
         return TokenRes.builder()
                 .userId(user.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .userRole(user.getUserRole())
                 .build();
+    }
+
+    public void invalidRefreshToken(Authentication authentication) {
+        refreshTokenService.invalidByUserId(authentication.getName());
     }
 
 //    public TokenDto refresh(TokenDto tokenDto) throws RuntimeException {
@@ -75,14 +93,5 @@ public class AuthServiceImpl {
 //        log.info("refresh out");
 //        return newToken;
 //    }
-
-    public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-        public Optional<User> getMyUserWithAuthorities() {
-            return SecurityUtil.getCurrentUsername()
-                    .flatMap(userRepository::findById);
-        }
 
     }

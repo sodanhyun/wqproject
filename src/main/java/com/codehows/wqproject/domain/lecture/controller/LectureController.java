@@ -9,6 +9,7 @@ import com.codehows.wqproject.domain.lecture.service.LectureService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,9 +87,10 @@ public class LectureController {
     @GetMapping("/image/{code}")
     public ResponseEntity<?> lectureImage(@PathVariable String code) {
         try{
-            return ResponseEntity.ok().body(lectureService.lectureImage(code));
+            Resource res = lectureService.lectureImage(code);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("해당 이미지를 찾을 수 없습니다.", HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>("존재하지 않는 이미지 입니다.", HttpStatus.OK);
         }
     }
     

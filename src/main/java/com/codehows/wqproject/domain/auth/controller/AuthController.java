@@ -2,10 +2,12 @@ package com.codehows.wqproject.domain.auth.controller;
 
 import com.codehows.wqproject.domain.auth.requestDto.LoginDto;
 import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
+import com.codehows.wqproject.domain.auth.service.AuthService;
 import com.codehows.wqproject.domain.auth.service.impl.AuthServiceImpl;
 import com.codehows.wqproject.utils.CookieUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,7 +28,7 @@ import static com.codehows.wqproject.constant.JwtTokenConstant.*;
 @Slf4j
 public class AuthController {
 
-    private final AuthServiceImpl authServiceImpl;
+    private final AuthService authService;
 
 //    @GetMapping("/tempToken")
 //    public ResponseEntity<?> tempToken() {
@@ -45,7 +48,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
         try{
-            TokenRes res = authServiceImpl.login(loginDto);
+            TokenRes res = authService.login(loginDto);
             CookieUtil.addCookie(response,
                     ACCESS_TOKEN_COOKIE_NAME,
                     res.getAccessToken(),
@@ -60,14 +63,12 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletResponse response) {
-        // 리프레시 토큰을 저장하는 쿠키를 제거합니다.
-        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
-        refreshTokenCookie.setMaxAge(0); // 쿠키 만료시간을 0으로 설정하여 삭제
-        refreshTokenCookie.setPath("/logout"); // 쿠키의 경로 설정 (로그아웃 처리와 같은 경로로 설정)
-        response.addCookie(refreshTokenCookie); // 응답 헤더에 쿠키 추가
-        return ResponseEntity.ok("로그아웃 되었습니다.");
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
+        authService.invalidRefreshToken(authentication);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    @PostMapping("/refresh")

@@ -38,9 +38,8 @@ public class AccountServiceImpl implements AccountService {
         userRepository.save(member);
     }
 
-    public List<String> getAuthorities() {
+    public List<UserRole> getAuthorities() {
         return Stream.of(UserRole.values())
-                .map(Enum::name)
                 .collect(Collectors.toList());
     }
 
@@ -53,10 +52,10 @@ public class AccountServiceImpl implements AccountService {
 
     public void updateAuthorities(String userId, String userRole) {
         User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-        user.updateRole(UserRole.valueOf(userRole));
+        user.updateRole(UserRole.valueOf(userRole.split("_")[1]));
     }
 
-    public void deleteMember(String memberId) {
+    public void deleteUser(String memberId) {
         for(Question q : questionRepository.findAllByMemberId(memberId)) {
             answerRepository.deleteAll(answerRepository.findAllByQuestion(q));
             questionRepository.delete(q);
@@ -64,6 +63,10 @@ public class AccountServiceImpl implements AccountService {
         User user = userRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         refreshTokenRepository.deleteByUser(user);
         userRepository.delete(user);
+    }
+
+    public User findUserById(String userId) {
+        return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
     }
 
 }
