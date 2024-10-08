@@ -84,7 +84,7 @@ pipeline {
                           -p 8080:8080 \
                           -v /docker_projects/wqproejct-be/volumes/gen:/gen \
                           --restart unless-stopped \
-                          --network application \
+                          --network=application \
                           -e TZ=Asia/Seoul \
                           -d \
                           be_wqproject:${timestamp}
