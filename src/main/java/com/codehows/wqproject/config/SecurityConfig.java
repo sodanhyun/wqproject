@@ -60,13 +60,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler))
                 .oauth2Login(oauth2 -> oauth2
-                        .authorizationEndpoint(it -> it
-                                .baseUri("/oauth2/authorize")
-                                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository))
-                        .redirectionEndpoint(it -> it
-                                .baseUri("/oauth2/callback/*"))
-                        .userInfoEndpoint(it -> it
-                                .userService(oAuth2UserCustomService))
+                        .authorizationEndpoint(it -> it.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository))
+                        .userInfoEndpoint(it -> it.userService(oAuth2UserCustomService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler))
                 .logout(logout -> logout
@@ -110,7 +105,6 @@ public class SecurityConfig {
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
-        config.addExposedHeader(HEADER_AUTHORIZATION);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

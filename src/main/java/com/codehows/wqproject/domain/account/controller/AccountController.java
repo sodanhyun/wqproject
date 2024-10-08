@@ -31,7 +31,7 @@ public class AccountController {
     }
 
     @GetMapping("/authorities")
-    public ResponseEntity<?> authority() {
+    public ResponseEntity<?> getUsersInfo() {
         HashMap<String, Object> res = new HashMap<>();
         res.put("authorities", accountService.getAuthorities());;
         res.put("members", accountService.getUsers());

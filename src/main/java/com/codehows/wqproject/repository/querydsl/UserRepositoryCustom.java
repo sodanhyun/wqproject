@@ -5,5 +5,5 @@ import com.codehows.wqproject.entity.User;
 import java.util.List;
 
 public interface UserRepositoryCustom {
-    List<User> getUsersNotUserRole();
+    List<User> getAllUsers();
 }

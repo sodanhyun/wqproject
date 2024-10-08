@@ -44,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public List<AccountInfoRes> getUsers() {
-        return userRepository.getUsersNotUserRole()
+        return userRepository.getAllUsers()
                 .stream()
                 .map(AccountInfoRes::of)
                 .toList();

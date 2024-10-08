@@ -4,7 +4,10 @@ import com.codehows.wqproject.domain.account.service.AccountService;
 import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
 import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
+import com.codehows.wqproject.domain.auth.service.RefreshTokenService;
+import com.codehows.wqproject.entity.RefreshToken;
 import com.codehows.wqproject.entity.User;
+import com.codehows.wqproject.utils.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +35,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenProvider tokenProvider;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
     private final AccountService accountService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -42,9 +46,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         SocialType type = getOAuthType(Objects.requireNonNull(WebUtils.getCookie(request, TYPE)).getValue());
         String userId = getUserId(type, attributes);
         User user = accountService.findUserById(userId);
-        String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
-        addRefreshTokenToCookie(request, response, refreshToken);
         String accessToken = tokenProvider.createJwtToken(user.getId(), "access");
+        String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
+        refreshTokenService.updateOrSaveByUser(user, refreshToken);
+        CookieUtil.addCookie(response,
+                ACCESS_TOKEN_COOKIE_NAME,
+                accessToken,
+                ACCESS_TOKEN_DURATION);
+        CookieUtil.addCookie(response,
+                REFRESH_TOKEN_COOKIE_NAME,
+                refreshToken,
+                REFRESH_TOKEN_DURATION);
         String targetUrl = getTargetUrl(request,
                 TokenRes.builder()
                         .userId(user.getId())

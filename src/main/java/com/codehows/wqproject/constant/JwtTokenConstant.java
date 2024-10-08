@@ -7,22 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 
 public class JwtTokenConstant {
+
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
     public static final String TYPE = "type";
     public static final String ACCESS_TOKEN_COOKIE_NAME = "X-AUTH_TOKEN";
     public static final String REFRESH_TOKEN_COOKIE_NAME = "X-REFRESH_TOKEN";
+    public static final String HEADER_AUTHORIZATION = "authorization";
     public static final Duration COOKIE_EXPIRE = Duration.ofHours(5);
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
-    public static final String HEADER_AUTHORIZATION = "authorization";
-    public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String AUTHORITIES_KEY = "auth";
-
-    public static void addRefreshTokenToCookie(HttpServletRequest request,
-                                         HttpServletResponse response,
-                                         String refreshToken) {
-        CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, REFRESH_TOKEN_DURATION);
-    }
-
 }

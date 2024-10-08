@@ -32,6 +32,11 @@ pipeline {
             steps {
                 dir('.') {
                     sh """
+                    cp /application-prod.yml ./src/main/resources/application-prod.yml
+                    """
+                }
+                dir('.') {
+                    sh """
                     chmod +x gradlew
                     """
                 }

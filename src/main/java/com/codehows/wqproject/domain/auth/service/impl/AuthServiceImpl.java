@@ -29,7 +29,6 @@ import java.util.*;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RefreshTokenService refreshTokenService;
@@ -59,19 +58,13 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findById(authentication.getName()).orElseThrow(EntityNotFoundException::new);
         String accessToken = tokenProvider.createJwtToken(user.getId(), "access");
         String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
-        RefreshToken refreshToken1 = refreshTokenRepository.findByUser(user)
-                .orElse(RefreshToken.builder()
-                        .user(user)
-                        .value(refreshToken)
-                        .build()
-                );
-        refreshToken1.update(refreshToken);
-        refreshTokenRepository.save(refreshToken1);
+        refreshTokenService.updateOrSaveByUser(user, refreshToken);
         return TokenRes.builder()
                 .userId(user.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .userRole(user.getUserRole())
+                .userType("own")
                 .build();
     }
 

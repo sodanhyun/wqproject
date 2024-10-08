@@ -67,6 +67,7 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         CookieUtil.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
+        CookieUtil.deleteCookie(request, response, TYPE);
         authService.invalidRefreshToken(authentication);
         return new ResponseEntity<>(HttpStatus.OK);
     }

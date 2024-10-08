@@ -18,3 +18,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+jwt:
+  issuer: wqproject
+  secret-access-key: test=access=key
+  secret-refresh-key: test=refresh=key

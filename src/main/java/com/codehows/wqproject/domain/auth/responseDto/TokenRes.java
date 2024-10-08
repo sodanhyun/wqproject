@@ -12,5 +12,6 @@ public class TokenRes {
     private String userId;
     private String accessToken;
     private String refreshToken;
+    private String userType;
     private UserRole userRole;
 }

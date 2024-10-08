@@ -35,7 +35,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                 kakaoAccount.get("profile") instanceof Map<?, ?> kakaoProfile) {
             String email = (String) kakaoAccount.get("email");
             String name = (String) kakaoProfile.get("nickname");
-            User user = userRepository.findById(email)
+            User user = userRepository.findById(email + "_" + SocialType.KAKAO.getType())
                     .map(entity -> entity.updateName(name))
                     .orElse(User.builder()
                             .email(email)
@@ -51,7 +51,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
-        User user = userRepository.findById(email)
+        User user = userRepository.findById(email + "_" + SocialType.GOOGLE.getType())
                 .map(entity -> entity.updateName(name))
                 .orElse(User.builder()
                         .email(email)

@@ -2,6 +2,7 @@ package com.codehows.wqproject.domain.auth.service.impl;
 
 import com.codehows.wqproject.domain.auth.service.RefreshTokenService;
 import com.codehows.wqproject.entity.RefreshToken;
+import com.codehows.wqproject.entity.User;
 import com.codehows.wqproject.repository.RefreshTokenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -9,12 +10,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
+
+    public Optional<RefreshToken> findByUser(User user) {
+        return refreshTokenRepository.findByUser(user);
+    }
 
     public RefreshToken findByUserId(String userId) {
         return refreshTokenRepository.findByUserId(userId).orElse(null);
@@ -30,6 +37,17 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             throw new EntityNotFoundException();
         });
         refreshToken.update("");
+    }
+
+    public void updateOrSaveByUser(User user, String refreshToken) {
+        RefreshToken refreshToken1 = refreshTokenRepository.findByUser(user)
+                .orElse(RefreshToken.builder()
+                .user(user)
+                .value(refreshToken)
+                .build()
+        );
+        refreshToken1.update(refreshToken);
+        refreshTokenRepository.save(refreshToken1);
     }
 
 }
