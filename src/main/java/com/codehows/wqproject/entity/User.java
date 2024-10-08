@@ -49,9 +49,9 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public static User create(UserFormDto dto, PasswordEncoder passwordEncoder) {
+    public static User createByOwn(UserFormDto dto, PasswordEncoder passwordEncoder) {
         User user = new User();
-        user.setId(dto.getEmail() + "_" + SocialType.OWN.getType());
+        user.setId(dto.getId());
         user.setEmail(dto.getEmail());
         user.setName(dto.getName());
         String password = passwordEncoder.encode(dto.getPassword());

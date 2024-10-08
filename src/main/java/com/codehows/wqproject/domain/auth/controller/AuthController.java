@@ -1,9 +1,9 @@
 package com.codehows.wqproject.domain.auth.controller;
 
 import com.codehows.wqproject.domain.auth.requestDto.LoginDto;
-import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
-import com.codehows.wqproject.domain.auth.responseDto.TokenResponse;
-import com.codehows.wqproject.domain.auth.service.impl.AuthService;
+import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
+import com.codehows.wqproject.domain.auth.service.impl.AuthServiceImpl;
+import com.codehows.wqproject.utils.CookieUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-import static com.codehows.wqproject.constant.JwtTokenConstant.HEADER_AUTHORIZATION;
+import static com.codehows.wqproject.constant.JwtTokenConstant.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,18 +25,7 @@ import static com.codehows.wqproject.constant.JwtTokenConstant.HEADER_AUTHORIZAT
 @Slf4j
 public class AuthController {
 
-    private final AuthService authService;
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody UserFormDto userFormDto) {
-        try{
-            authService.signup(userFormDto);
-            return ResponseEntity.ok().build();
-        }catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
-        }
-
-    }
+    private final AuthServiceImpl authServiceImpl;
 
 //    @GetMapping("/tempToken")
 //    public ResponseEntity<?> tempToken() {
@@ -53,15 +42,19 @@ public class AuthController {
 //    }
 
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authorize(@Valid @RequestBody LoginDto loginDto) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
         try{
-            HashMap<String, Object> result = authService.signin(loginDto);
-            TokenResponse tokenDto = (TokenResponse)(result.get("tokenDto"));
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HEADER_AUTHORIZATION,
-                    "Bearer " + tokenDto.getAccessToken());
-            return new ResponseEntity<>(result, httpHeaders, HttpStatus.OK);
+            TokenRes res = authServiceImpl.login(loginDto);
+            CookieUtil.addCookie(response,
+                    ACCESS_TOKEN_COOKIE_NAME,
+                    res.getAccessToken(),
+                    REFRESH_TOKEN_DURATION);
+            CookieUtil.addCookie(response,
+                    REFRESH_TOKEN_COOKIE_NAME,
+                    res.getRefreshToken(),
+                    REFRESH_TOKEN_DURATION);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (EntityNotFoundException e) {
             return new ResponseEntity<>("아이디 혹은 비밀번호가 틀렸습니다.", HttpStatus.METHOD_NOT_ALLOWED);
         }

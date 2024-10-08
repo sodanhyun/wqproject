@@ -42,7 +42,7 @@ public class WebSocketController {
         String token = Objects.requireNonNull(
                 accessor.getFirstNativeHeader("Authorization")
         ).substring(7);
-        String userId = tokenProvider.getAuthentication(token).getName();
+        String userId = tokenProvider.getAuthentication(tokenProvider.getUserIdInAccessToken(token)).getName();
         CLIENTS.put(sessionId, userId);
         log.info("[새션 연결됨] sessionId: "+ sessionId + " userId: " + userId);
     }

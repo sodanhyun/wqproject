@@ -26,12 +26,12 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
+        //TODO 쿠키 토큰 인증 방식으로 변환 필요
         if(StompCommand.CONNECT.equals(accessor.getCommand())) {
             String token = Objects.requireNonNull(
                     accessor.getFirstNativeHeader("Authorization")
             ).substring(7);
-            tokenProvider.validateToken(token);
+            tokenProvider.validateAccessToken(token);
         }
         return message;
     }

@@ -12,6 +12,7 @@ import com.codehows.wqproject.repository.QuestionRepository;
 import com.codehows.wqproject.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,14 @@ public class AccountServiceImpl implements AccountService {
     private final AnswerRepository answerRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    public void regist(UserFormDto userFormDto) {
+        if (userRepository.findById(userFormDto.getId()).orElse(null) != null) {
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+        }
+        User member = User.createByOwn(userFormDto, new BCryptPasswordEncoder());
+        userRepository.save(member);
+    }
+
     public List<String> getAuthorities() {
         return Stream.of(UserRole.values())
                 .map(Enum::name)
@@ -36,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public List<AccountInfoRes> getUsers() {
-        return userRepository.authorityEdit()
+        return userRepository.getUsersNotUserRole()
                 .stream()
                 .map(AccountInfoRes::of)
                 .toList();

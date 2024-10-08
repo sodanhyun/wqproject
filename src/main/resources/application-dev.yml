@@ -1,6 +1,6 @@
-domainName: "http://localhost:5173"
-#uploadPath: C:/wqproject/resource/image/
-uploadPath: /Users/danhyeon/wqproject/resource/image/
+domainName: "https://localhost:5173"
+uploadPath: C:/wqproject/resource/image/
+#uploadPath: /Users/danhyeon/wqproject/resource/image/
 
 server:
   port: 8080

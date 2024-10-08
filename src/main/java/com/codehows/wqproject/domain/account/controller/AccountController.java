@@ -2,6 +2,8 @@ package com.codehows.wqproject.domain.account.controller;
 
 import com.codehows.wqproject.domain.account.requestDto.AccountUpdateReq;
 import com.codehows.wqproject.domain.account.service.AccountService;
+import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,12 +13,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/account")
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
 
     private final AccountService accountService;
+
+    @PostMapping("/regist")
+    public ResponseEntity<?> signup(@Valid @RequestBody UserFormDto userFormDto) {
+        try{
+            accountService.regist(userFormDto);
+            return ResponseEntity.ok().build();
+        }catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
+    }
 
     @GetMapping("/authorities")
     public ResponseEntity<?> authority() {

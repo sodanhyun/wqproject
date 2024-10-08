@@ -1,10 +1,10 @@
 package com.codehows.wqproject.auth.oAuth;
 
-import com.codehows.wqproject.auth.jwt.JwtRefreshTokenService;
+import com.codehows.wqproject.domain.auth.service.impl.RefreshTokenServiceImpl;
 import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
 import com.codehows.wqproject.constant.enumVal.SocialType;
-import com.codehows.wqproject.domain.auth.responseDto.TokenResponse;
-import com.codehows.wqproject.domain.auth.service.impl.AuthService;
+import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
+import com.codehows.wqproject.domain.auth.service.impl.AuthServiceImpl;
 import com.codehows.wqproject.entity.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +31,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String domainName;
 
     private final JwtTokenProvider tokenProvider;
-    private final JwtRefreshTokenService refreshTokenService;
+    private final RefreshTokenServiceImpl refreshTokenService;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -43,11 +43,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> attributes = oAuth2User.getAttributes();
         SocialType type = getOAuthType(Objects.requireNonNull(WebUtils.getCookie(request, TYPE)).getValue());
         String userId = getUserId(type, attributes);
-        User user = authService.findById(userId);
-        String refreshToken = refreshTokenService.createNewToken(user);
+        User user = authServiceImpl.findById(userId);
+        String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
         addRefreshTokenToCookie(request, response, refreshToken);
-        String accessToken = tokenProvider.createJwtToken(user, "access");
-        String targetUrl = getTargetUrl(request, new TokenResponse(accessToken, refreshToken, user.getUserRole().getType()));
+        String accessToken = tokenProvider.createJwtToken(user.getId(), "access");
+        String targetUrl = getTargetUrl(request,
+                TokenRes.builder()
+                        .userId(user.getId())
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .userRole(user.getUserRole()).build()
+        );
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -77,13 +83,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return null;
     }
 
-    private String getTargetUrl(HttpServletRequest request, TokenResponse response) {
+    private String getTargetUrl(HttpServletRequest request, TokenRes response) {
         Cookie cookie = WebUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME);
         String redirectPath = domainName + (cookie==null ? "/" : cookie.getValue());
 
         return UriComponentsBuilder.fromUriString(redirectPath)
                 .queryParam("access_token", response.getAccessToken())
-                .queryParam("authority", response.getAuthority())
+                .queryParam("authority", response.getUserRole().getType())
                 .build()
                 .toUriString();
     }

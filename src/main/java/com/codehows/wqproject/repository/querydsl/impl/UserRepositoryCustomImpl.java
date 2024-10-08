@@ -17,7 +17,7 @@ public class UserRepositoryCustomImpl extends Querydsl4RepositorySupport impleme
     }
 
     @Override
-    public List<User> authorityEdit() {
+    public List<User> getUsersNotUserRole() {
         return select(user)
                 .from(user)
                 .where(user.userRole.ne(UserRole.USER))

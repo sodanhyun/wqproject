@@ -10,8 +10,9 @@ public class JwtTokenConstant {
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
     public static final String TYPE = "type";
-    public static final int COOKIE_EXPIRE_SECONDS = 18000;
-    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+    public static final String ACCESS_TOKEN_COOKIE_NAME = "X-AUTH_TOKEN";
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "X-REFRESH_TOKEN";
+    public static final Duration COOKIE_EXPIRE = Duration.ofHours(5);
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
     public static final String HEADER_AUTHORIZATION = "authorization";
@@ -21,9 +22,7 @@ public class JwtTokenConstant {
     public static void addRefreshTokenToCookie(HttpServletRequest request,
                                          HttpServletResponse response,
                                          String refreshToken) {
-        int cookieMaxAge = (int) REFRESH_TOKEN_DURATION.toSeconds();
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
-        CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
+        CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, REFRESH_TOKEN_DURATION);
     }
 
 }

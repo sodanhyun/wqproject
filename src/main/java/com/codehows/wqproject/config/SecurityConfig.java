@@ -76,16 +76,16 @@ public class SecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests( request -> request
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers(antMatcher("/images/**")).permitAll()
-                        .requestMatchers(antMatcher("/question/**")).hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(antMatcher("/lecture/*")).hasAnyRole("ADMIN")
-                        .requestMatchers(antMatcher("/role/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher("/auth/**")).permitAll()
+                        .requestMatchers(antMatcher("/account/regist")).permitAll()
                         .requestMatchers(antMatcher("/lecture/image/*")).permitAll()
                         .requestMatchers(antMatcher("/lecture/limit/*")).permitAll()
                         .requestMatchers(antMatcher("/favicon.ico")).permitAll()
-                        .requestMatchers(antMatcher("/auth/**")).permitAll()
                         .requestMatchers(antMatcher("/oauth2/**")).permitAll()
                         .requestMatchers(antMatcher("/ws")).permitAll()
+                        .requestMatchers(antMatcher("/account/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher("/lecture/*")).hasAnyRole("ADMIN")
+                        .requestMatchers(antMatcher("/question/**")).hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
                 .build();
     }

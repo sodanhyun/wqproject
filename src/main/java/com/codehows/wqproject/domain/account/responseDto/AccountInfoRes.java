@@ -1,5 +1,6 @@
 package com.codehows.wqproject.domain.account.responseDto;
 
+import com.codehows.wqproject.constant.enumVal.UserRole;
 import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
 import com.codehows.wqproject.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +20,7 @@ import org.modelmapper.ModelMapper;
 public class AccountInfoRes {
     private String id;
     private String name;
-    private String role;
+    private UserRole role;
 
     private static ModelMapper modelMapper = new ModelMapper();
 

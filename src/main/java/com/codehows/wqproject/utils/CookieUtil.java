@@ -3,11 +3,14 @@ package com.codehows.wqproject.utils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.util.SerializationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -25,13 +28,16 @@ public class CookieUtil {
         return Optional.empty();
     }
 
-    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        response.addCookie(cookie);
+    public static void addCookie(HttpServletResponse response, String name, String value, Duration maxAge) {
+        response.addHeader(HttpHeaders.SET_COOKIE,
+                ResponseCookie.from(name, value)
+                        .path("/")
+                        .sameSite("None")
+                        .secure(true)
+                        .httpOnly(true)
+                        .maxAge(maxAge)
+                        .build()
+                        .toString());
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
