@@ -82,7 +82,7 @@ pipeline {
                         docker run \
                           --name=be_wqproject \
                           -p 8080:8080 \
-                          -v /docker_projects/wqproejct-be/volumes/gen:/gen \
+                          -v /home/docker_projects/wqproejct-be/volumes/gen:/gen \
                           --restart unless-stopped \
                           --network=application \
                           -e TZ=Asia/Seoul \
