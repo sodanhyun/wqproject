@@ -50,5 +50,5 @@ src/main/frontend/.env.production.local
 src/main/frontend/npm-debug.log*
 src/main/frontend/yarn-debug.log*
 src/main/frontend/yarn-error.log*
-
+src/main/resources/application-dev.yml
 src/main/resources/application-prod.yml

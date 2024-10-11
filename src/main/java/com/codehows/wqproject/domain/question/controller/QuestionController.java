@@ -1,6 +1,6 @@
 package com.codehows.wqproject.domain.question.controller;
 
-import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureDetailRes;
 import com.codehows.wqproject.domain.lecture.service.LectureService;
 import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
 import com.codehows.wqproject.domain.question.service.impl.QuestionService;
@@ -36,7 +36,7 @@ public class QuestionController {
 
     @GetMapping("/active/{lCode}")
     public ResponseEntity<Boolean> activeCheck(@PathVariable String lCode) {
-        LectureRes res = lectureService.findOne(lCode);
+        LectureDetailRes res = lectureService.findOne(lCode);
         return ResponseEntity.ok().body(res.getActive());
     }
 }
