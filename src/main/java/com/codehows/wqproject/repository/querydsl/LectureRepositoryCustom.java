@@ -11,6 +11,7 @@ import java.util.List;
 public interface LectureRepositoryCustom {
 
     String findMaxKey();
+    List<LectureInfoRes> allStartedList();
     List<LectureInfoRes> allListByMonth(LocalDateTime date);
     Page<LectureInfoRes> searchList(String keyword, LocalDateTime sdate, LocalDateTime edate, Pageable pageable);
 }

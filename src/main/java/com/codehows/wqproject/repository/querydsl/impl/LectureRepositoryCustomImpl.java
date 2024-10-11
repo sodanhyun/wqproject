@@ -28,12 +28,19 @@ public class LectureRepositoryCustomImpl extends Querydsl4RepositorySupport impl
         super(queryFactory);
     }
 
-    private BooleanExpression searchDateFilter(LocalDateTime date) {
+    private BooleanExpression monthScopeFilter(LocalDateTime date) {
         LocalDate localDate = date.toLocalDate();
         LocalDateTime sdate = localDate.atStartOfDay();
         LocalDateTime edate = localDate.withDayOfMonth(localDate.lengthOfMonth()).atTime(23, 59, 59);
         BooleanExpression endDateIsGoeStartDate = lecture.edate.goe(sdate);
         BooleanExpression startDateIsLoeEndDate = lecture.sdate.loe(edate);
+
+        return Expressions.allOf(endDateIsGoeStartDate, startDateIsLoeEndDate);
+    }
+
+    private BooleanExpression searchDateFilter(LocalDateTime date) {
+        BooleanExpression endDateIsGoeStartDate = lecture.edate.goe(date);
+        BooleanExpression startDateIsLoeEndDate = lecture.sdate.loe(date);
 
         return Expressions.allOf(endDateIsGoeStartDate, startDateIsLoeEndDate);
     }
@@ -60,7 +67,8 @@ public class LectureRepositoryCustomImpl extends Querydsl4RepositorySupport impl
     }
 
     @Override
-    public List<LectureInfoRes> allListByMonth(LocalDateTime date) {
+    public List<LectureInfoRes> allStartedList() {
+        LocalDateTime date = LocalDateTime.now();
         return select(Projections.fields(LectureInfoRes.class,
                 lecture.lCode,
                 lecture.title,
@@ -69,6 +77,19 @@ public class LectureRepositoryCustomImpl extends Querydsl4RepositorySupport impl
                 lecture.active))
                 .from(lecture)
                 .where(searchDateFilter(date))
+                .fetch();
+    }
+
+    @Override
+    public List<LectureInfoRes> allListByMonth(LocalDateTime date) {
+        return select(Projections.fields(LectureInfoRes.class,
+                lecture.lCode,
+                lecture.title,
+                lecture.sdate,
+                lecture.edate,
+                lecture.active))
+                .from(lecture)
+                .where(monthScopeFilter(date))
                 .fetch();
     }
 

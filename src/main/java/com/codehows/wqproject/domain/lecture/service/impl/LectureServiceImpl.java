@@ -44,6 +44,10 @@ public class LectureServiceImpl implements LectureService {
     @Value("${uploadPath}")
     private String uploadPath;
 
+    public List<LectureInfoRes> getAllActivatedList() {
+        return lectureRepository.allStartedList();
+    }
+
     public List<LectureInfoRes> getFilteredAllList(LocalDateTime date) {
         return lectureRepository.allListByMonth(date);
     }

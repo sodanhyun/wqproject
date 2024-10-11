@@ -36,11 +36,16 @@ public class LectureController {
     private final LectureService lectureService;
 
     @GetMapping(value = {"/list"})
-    public ResponseEntity<?> list(@RequestParam("date")
+    public ResponseEntity<?> list(@RequestParam(value = "date", required = false)
                                       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
-                                      LocalDateTime date) {
+                                      Optional<LocalDateTime> date) {
+        List<LectureInfoRes> res;
+        if(date.isPresent()) {
+            res = lectureService.getFilteredAllList(date.get());
+        }else {
+            res = lectureService.getAllActivatedList();
+        }
 
-        List<LectureInfoRes> res = lectureService.getFilteredAllList(date);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

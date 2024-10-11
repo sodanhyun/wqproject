@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface LectureService {
+    public List<LectureInfoRes> getAllActivatedList();
     public List<LectureInfoRes> getFilteredAllList(LocalDateTime date);
     public Page<LectureInfoRes> getFilteredListByPaging(LectureSearchConditionReq dto, Pageable pageable);
     public LectureDetailRes findOne(String lCode);
