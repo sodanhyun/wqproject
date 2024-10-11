@@ -30,9 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(accessToken != null && !accessToken.isEmpty() && !accessToken.equals("null")) {
             String accessTokenState = jwtTokenProvider.validateAccessToken(accessToken);
-            Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.getUserIdInAccessToken(accessToken));
             if (accessTokenState.equals("success")) {
                 log.info("Valid access token");
+                Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.getUserIdInAccessToken(accessToken));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else if (accessTokenState.equals("expired")) {
                 log.info("Expired access token");
@@ -40,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     String refreshTokenState = jwtTokenProvider.validateRefreshToken(refreshToken);
                     if (refreshTokenState.equals("success")) {
                         log.info("Valid refresh token");
+                        Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.getUserIdInRefreshToken(refreshToken));
                         String userId = authentication.getName();
                         String newAccessToken = jwtTokenProvider.createJwtToken(userId, "access");
                         String newRefreshToken = jwtTokenProvider.createJwtToken(userId, "refresh");

@@ -1,7 +1,8 @@
 package com.codehows.wqproject.domain.lecture.service.impl;
 
+import com.codehows.wqproject.domain.lecture.responseDto.LectureInfoRes;
 import com.codehows.wqproject.domain.lecture.responseDto.LectureLimitRes;
-import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureDetailRes;
 import com.codehows.wqproject.domain.lecture.service.LectureService;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureReq;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureSearchConditionReq;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,11 +44,11 @@ public class LectureServiceImpl implements LectureService {
     @Value("${uploadPath}")
     private String uploadPath;
 
-    public Page<LectureRes> getList(Pageable pageable) {
-        return lectureRepository.findAllList(pageable);
+    public List<LectureInfoRes> getFilteredAllList(LocalDateTime date) {
+        return lectureRepository.allListByMonth(date);
     }
 
-    public Page<LectureRes> getFilteredList(LectureSearchConditionReq dto, Pageable pageable) {
+    public Page<LectureInfoRes> getFilteredListByPaging(LectureSearchConditionReq dto, Pageable pageable) {
         return lectureRepository.searchList(
                 dto.getKeyword(),
                 dto.getSdate(),
@@ -55,12 +57,12 @@ public class LectureServiceImpl implements LectureService {
         );
     }
 
-    public LectureRes findOne(String lCode) throws EntityNotFoundException {
+    public LectureDetailRes findOne(String lCode) throws EntityNotFoundException {
         Lecture lecture = lectureRepository.findById(lCode).orElseGet(() -> {
                     log.info("해당 강의 없음");
                     throw new EntityNotFoundException();
                 });
-        return LectureRes.of(lecture);
+        return LectureDetailRes.of(lecture);
     }
 
     public Resource lectureImage(String lCode) throws EntityNotFoundException {

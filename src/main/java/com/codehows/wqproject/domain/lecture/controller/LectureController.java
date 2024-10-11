@@ -4,9 +4,11 @@ import com.codehows.wqproject.commonDto.PageDto;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureActiveReq;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureReq;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureSearchConditionReq;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureInfoRes;
 import com.codehows.wqproject.domain.lecture.responseDto.LectureLimitRes;
-import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
+import com.codehows.wqproject.domain.lecture.responseDto.LectureDetailRes;
 import com.codehows.wqproject.domain.lecture.service.LectureService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codehows.wqproject.constant.PageConstant.MAX_PAGE_NUMBER;
 import static com.codehows.wqproject.constant.PageConstant.MAX_SIZE_PER_PAGE;
 
 @RestController
@@ -33,19 +35,26 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping(value = {"/list", "/list/{page}"})
-    public ResponseEntity<?> list(@PathVariable(required = false) Optional<Integer> page) {
-        Pageable pageable = PageRequest.of(page.orElse(0), MAX_SIZE_PER_PAGE);
-        Page<LectureRes> res = lectureService.getList(pageable);
-        return new ResponseEntity<>(new PageDto<>(res, MAX_PAGE_NUMBER), HttpStatus.OK);
+    @GetMapping(value = {"/list"})
+    public ResponseEntity<?> list(@RequestParam("date")
+                                      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
+                                      LocalDateTime date) {
+
+        List<LectureInfoRes> res = lectureService.getFilteredAllList(date);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping(value = {"/filteredList", "/filteredList/{page}"})
     public ResponseEntity<?> filteredList(LectureSearchConditionReq req,
-                                          @PathVariable(required = false) Optional<Integer> page) {
-        Pageable pageable = PageRequest.of(page.orElse(0), MAX_SIZE_PER_PAGE);
-        Page<LectureRes> res = lectureService.getFilteredList(req, pageable);
-        return new ResponseEntity<>(new PageDto<>(res, MAX_PAGE_NUMBER), HttpStatus.OK);
+                                          @PathVariable(required = false) Optional<Integer> page,
+                                          @RequestParam(value = "itemsPerPage", required = false) Optional<Integer> itemsPerPage) {
+        Pageable pageable = PageRequest.of(page.orElse(0), itemsPerPage.orElse(MAX_SIZE_PER_PAGE));
+        Page<LectureInfoRes> pages = lectureService.getFilteredListByPaging(req, pageable);
+        PageDto<LectureInfoRes> res = new PageDto<>();
+        res.setContent(pages.getContent());
+        res.setPageNumber(pages.getNumber());
+        res.setTotalPages(pages.getTotalPages());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping(value = "/regist")
@@ -58,7 +67,7 @@ public class LectureController {
     @GetMapping("/{code}")
     public ResponseEntity<?> detail(@PathVariable String code) {
         try {
-            LectureRes res = lectureService.findOne(code);
+            LectureDetailRes res = lectureService.findOne(code);
             return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (EntityNotFoundException e) {
             return new ResponseEntity<>("해당 강의를 찾을 수 없습니다.", HttpStatus.METHOD_NOT_ALLOWED);
