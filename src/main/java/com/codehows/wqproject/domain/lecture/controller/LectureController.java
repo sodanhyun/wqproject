@@ -1,5 +1,6 @@
 package com.codehows.wqproject.domain.lecture.controller;
 
+import com.codehows.wqproject.commonDto.PageDto;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureActiveReq;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureReq;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureSearchConditionReq;
@@ -10,12 +11,19 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.codehows.wqproject.constant.PageConstant.MAX_PAGE_NUMBER;
+import static com.codehows.wqproject.constant.PageConstant.MAX_SIZE_PER_PAGE;
 
 @RestController
 @RequestMapping("/lecture")
@@ -25,16 +33,19 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping("/list")
-    public ResponseEntity<?> list() {
-        List<LectureRes> res = lectureService.getList();
-        return new ResponseEntity<>(res, HttpStatus.OK);
+    @GetMapping(value = {"/list", "/list/{page}"})
+    public ResponseEntity<?> list(@PathVariable(required = false) Optional<Integer> page) {
+        Pageable pageable = PageRequest.of(page.orElse(0), MAX_SIZE_PER_PAGE);
+        Page<LectureRes> res = lectureService.getList(pageable);
+        return new ResponseEntity<>(new PageDto<>(res, MAX_PAGE_NUMBER), HttpStatus.OK);
     }
 
-    @PostMapping("/filteredList")
-    public ResponseEntity<?> filteredList(LectureSearchConditionReq req) {
-        List<LectureRes> res = lectureService.getFilteredList(req);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+    @PostMapping(value = {"/filteredList", "/filteredList/{page}"})
+    public ResponseEntity<?> filteredList(LectureSearchConditionReq req,
+                                          @PathVariable(required = false) Optional<Integer> page) {
+        Pageable pageable = PageRequest.of(page.orElse(0), MAX_SIZE_PER_PAGE);
+        Page<LectureRes> res = lectureService.getFilteredList(req, pageable);
+        return new ResponseEntity<>(new PageDto<>(res, MAX_PAGE_NUMBER), HttpStatus.OK);
     }
 
     @PostMapping(value = "/regist")

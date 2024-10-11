@@ -6,13 +6,15 @@ import com.codehows.wqproject.domain.lecture.responseDto.LectureLimitRes;
 import com.codehows.wqproject.domain.lecture.responseDto.LectureRes;
 import com.codehows.wqproject.entity.Lecture;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface LectureService {
-    public List<LectureRes> getList();
-    public List<LectureRes> getFilteredList(LectureSearchConditionReq dto);
+    public Page<LectureRes> getList(Pageable pageable);
+    public Page<LectureRes> getFilteredList(LectureSearchConditionReq dto, Pageable pageable);
     public LectureRes findOne(String lCode);
     public LectureLimitRes getLimitInfo(String lCode);
     public void regist (LectureReq lectureReq, MultipartFile img);

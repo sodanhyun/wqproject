@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,12 +42,17 @@ public class LectureServiceImpl implements LectureService {
     @Value("${uploadPath}")
     private String uploadPath;
 
-    public List<LectureRes> getList() {
-        return lectureRepository.findAllList();
+    public Page<LectureRes> getList(Pageable pageable) {
+        return lectureRepository.findAllList(pageable);
     }
 
-    public List<LectureRes> getFilteredList(LectureSearchConditionReq dto) {
-        return lectureRepository.searchList(dto.getKeyword(), dto.getSdate(), dto.getEdate());
+    public Page<LectureRes> getFilteredList(LectureSearchConditionReq dto, Pageable pageable) {
+        return lectureRepository.searchList(
+                dto.getKeyword(),
+                dto.getSdate(),
+                dto.getEdate(),
+                pageable
+        );
     }
 
     public LectureRes findOne(String lCode) throws EntityNotFoundException {
