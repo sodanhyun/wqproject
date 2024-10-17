@@ -32,7 +32,7 @@ pipeline {
             steps {
                 dir('.') {
                     sh """
-                    cp /application-prod.yml ./src/main/resources/application-prod.yml
+                    cp /var/jenkins_home/application-prod.yml ./src/main/resources/application-prod.yml
                     """
                 }
                 dir('.') {
