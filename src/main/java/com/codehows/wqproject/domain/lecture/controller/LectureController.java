@@ -7,6 +7,7 @@ import com.codehows.wqproject.domain.lecture.requestDto.LectureSearchConditionRe
 import com.codehows.wqproject.domain.lecture.responseDto.LectureInfoRes;
 import com.codehows.wqproject.domain.lecture.responseDto.LectureLimitRes;
 import com.codehows.wqproject.domain.lecture.responseDto.LectureDetailRes;
+import com.codehows.wqproject.domain.lecture.responseDto.LecturePageRes;
 import com.codehows.wqproject.domain.lecture.service.LectureService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EntityNotFoundException;
@@ -55,7 +56,7 @@ public class LectureController {
                                           @RequestParam(value = "itemsPerPage", required = false) Optional<Integer> itemsPerPage) {
         Pageable pageable = PageRequest.of(page.orElse(0), itemsPerPage.orElse(MAX_SIZE_PER_PAGE));
         Page<LectureInfoRes> pages = lectureService.getFilteredListByPaging(req, pageable);
-        PageDto<LectureInfoRes> res = new PageDto<>();
+        LecturePageRes res = new LecturePageRes();
         res.setContent(pages.getContent());
         res.setPageNumber(pages.getNumber());
         res.setTotalPages(pages.getTotalPages());

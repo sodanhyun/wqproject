@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccountUpdateReq {
-    String memberId;
-    String memberRole;
+    String id;
+    String userRole;
 }

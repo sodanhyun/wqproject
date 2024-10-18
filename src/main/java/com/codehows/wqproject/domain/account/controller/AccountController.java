@@ -1,16 +1,24 @@
 package com.codehows.wqproject.domain.account.controller;
 
+import com.codehows.wqproject.commonDto.PageDto;
 import com.codehows.wqproject.domain.account.requestDto.AccountUpdateReq;
+import com.codehows.wqproject.domain.account.responseDto.AccountInfoRes;
+import com.codehows.wqproject.domain.account.responseDto.AccountPageRes;
 import com.codehows.wqproject.domain.account.service.AccountService;
 import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.Optional;
+
+import static com.codehows.wqproject.constant.PageConstant.MAX_SIZE_PER_PAGE;
 
 @RestController
 @RequestMapping("/account")
@@ -30,17 +38,22 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/authorities")
-    public ResponseEntity<?> getUsersInfo() {
-        HashMap<String, Object> res = new HashMap<>();
-        res.put("authorities", accountService.getAuthorities());;
-        res.put("members", accountService.getUsers());
+    @GetMapping(value={"/authorities", "/authorities/{page}"})
+    public ResponseEntity<?> getUsersInfo(@PathVariable(required = false) Optional<Integer> page,
+                                          @RequestParam(value = "itemsPerPage", required = false) Optional<Integer> itemsPerPage) {
+        Pageable pageable = PageRequest.of(page.orElse(0), itemsPerPage.orElse(MAX_SIZE_PER_PAGE));
+        Page<AccountInfoRes> pages = accountService.getUsersByPaging(pageable);
+        AccountPageRes res = new AccountPageRes();
+        res.setContent(pages.getContent());
+        res.setAuthorities(accountService.getAuthorities());
+        res.setPageNumber(pages.getNumber());
+        res.setTotalPages(pages.getTotalPages());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PatchMapping("/update")
     public ResponseEntity<?> update(AccountUpdateReq req) {
-        accountService.updateAuthorities(req.getMemberId(), req.getMemberRole());
+        accountService.updateAuthorities(req.getId(), req.getUserRole());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

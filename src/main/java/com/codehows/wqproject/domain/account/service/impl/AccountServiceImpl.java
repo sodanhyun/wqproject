@@ -12,6 +12,8 @@ import com.codehows.wqproject.repository.QuestionRepository;
 import com.codehows.wqproject.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,11 +45,8 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
     }
 
-    public List<AccountInfoRes> getUsers() {
-        return userRepository.getAllUsers()
-                .stream()
-                .map(AccountInfoRes::of)
-                .toList();
+    public Page<AccountInfoRes> getUsersByPaging(Pageable pageable) {
+        return userRepository.getAllUsersByPaging(pageable);
     }
 
     public void updateAuthorities(String userId, String userRole) {

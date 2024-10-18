@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageDto<T> {
+public abstract class PageDto<T> {
     List<T> content;
     Integer pageNumber;
     Integer totalPages;
