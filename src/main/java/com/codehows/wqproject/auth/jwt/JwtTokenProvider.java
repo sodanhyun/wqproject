@@ -135,7 +135,7 @@ public class JwtTokenProvider {
     }
 
     public String refresh(String userId, String newRefreshToken) {
-        return refreshTokenService.updateRefreshToken(userId, newRefreshToken).toString();
+        return refreshTokenService.updateRefreshToken(userId, newRefreshToken).getValue();
     }
 
 }
