@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface UserRepositoryCustom {
     Page<AccountInfoRes> getAllUsersByPaging(Pageable pageable);
+    Page<AccountInfoRes> getSearchedUsersByPaging(Pageable pageable, String keyword);
 }

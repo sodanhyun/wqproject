@@ -52,12 +52,16 @@ public class AuthServiceImpl implements AuthService {
 //    }
 
     public TokenRes login(LoginDto loginDto) throws EntityNotFoundException {
+        User user = userRepository.findById(loginDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        if(user.getSocialType() != SocialType.OWN) {
+            throw new EntityNotFoundException("Social type not supported");
+        }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        User user = userRepository.findById(authentication.getName()).orElseThrow(EntityNotFoundException::new);
-        String accessToken = tokenProvider.createJwtToken(user.getId(), "access");
-        String refreshToken = tokenProvider.createJwtToken(user.getId(), "refresh");
+        String accessToken = tokenProvider.createJwtToken(authentication.getName(), "access");
+        String refreshToken = tokenProvider.createJwtToken(authentication.getName(), "refresh");
         refreshTokenService.updateOrSaveByUser(user, refreshToken);
         return TokenRes.builder()
                 .userId(user.getId())
@@ -72,19 +76,4 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenService.invalidByUserId(authentication.getName());
     }
 
-//    public TokenDto refresh(TokenDto tokenDto) throws RuntimeException {
-//        TokenStatus.StatusCode tokenStatusCode = tokenProvider.validateToken(tokenDto.getRefreshToken());
-//        if(tokenStatusCode != TokenStatus.StatusCode.OK)
-//            throw new RuntimeException("유효하지 않은 리프레시 토큰입니다.");
-//        Authentication authentication = tokenProvider.getAuthentication(tokenDto.getAccessToken());
-//        RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
-//                .orElseThrow(EntityNotFoundException::new);
-//        if(!refreshToken.getValue().equals(tokenDto.getRefreshToken()))
-//            throw new RuntimeException("토큰의 유저 정보와 일치하지 않습니다.");
-//        TokenDto newToken = tokenProvider.createToken(authentication);
-//        refreshToken.updateValue(newToken.getRefreshToken());
-//        log.info("refresh out");
-//        return newToken;
-//    }
-
-    }
+}

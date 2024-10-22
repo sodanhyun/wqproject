@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 public class AccountInfoRes {
     private String id;
     private String name;
+    private String email;
     private UserRole userRole;
 
     private static ModelMapper modelMapper = new ModelMapper();

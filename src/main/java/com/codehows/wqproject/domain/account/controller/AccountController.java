@@ -40,9 +40,15 @@ public class AccountController {
 
     @GetMapping(value={"/authorities", "/authorities/{page}"})
     public ResponseEntity<?> getUsersInfo(@PathVariable(required = false) Optional<Integer> page,
-                                          @RequestParam(value = "itemsPerPage", required = false) Optional<Integer> itemsPerPage) {
+                                          @RequestParam(value = "itemsPerPage", required = false) Optional<Integer> itemsPerPage,
+                                          @RequestParam(value = "keyword", required = false) String keyword) {
         Pageable pageable = PageRequest.of(page.orElse(0), itemsPerPage.orElse(MAX_SIZE_PER_PAGE));
-        Page<AccountInfoRes> pages = accountService.getUsersByPaging(pageable);
+        Page<AccountInfoRes> pages;
+        if(keyword.isEmpty() || keyword.isBlank()) {
+            pages = accountService.getUsersByPaging(pageable);
+        }else {
+            pages = accountService.getSearchedUsersByPaging(pageable, keyword);
+        }
         AccountPageRes res = new AccountPageRes();
         res.setContent(pages.getContent());
         res.setAuthorities(accountService.getAuthorities());
@@ -53,7 +59,7 @@ public class AccountController {
 
     @PatchMapping("/update")
     public ResponseEntity<?> update(AccountUpdateReq req) {
-        accountService.updateAuthorities(req.getId(), req.getUserRole());
+        accountService.updateAuthorities(req);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

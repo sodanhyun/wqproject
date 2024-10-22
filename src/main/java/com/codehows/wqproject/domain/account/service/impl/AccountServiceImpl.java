@@ -1,6 +1,7 @@
 package com.codehows.wqproject.domain.account.service.impl;
 
 import com.codehows.wqproject.constant.enumVal.UserRole;
+import com.codehows.wqproject.domain.account.requestDto.AccountUpdateReq;
 import com.codehows.wqproject.domain.account.responseDto.AccountInfoRes;
 import com.codehows.wqproject.domain.account.service.AccountService;
 import com.codehows.wqproject.domain.auth.requestDto.UserFormDto;
@@ -45,13 +46,19 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
     }
 
+    public Page<AccountInfoRes> getSearchedUsersByPaging(Pageable pageable, String keyword) {
+        return userRepository.getSearchedUsersByPaging(pageable, keyword);
+    }
+
     public Page<AccountInfoRes> getUsersByPaging(Pageable pageable) {
         return userRepository.getAllUsersByPaging(pageable);
     }
 
-    public void updateAuthorities(String userId, String userRole) {
-        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-        user.updateRole(UserRole.valueOf(userRole.split("_")[1]));
+    public void updateAuthorities(AccountUpdateReq req) {
+        User user = userRepository.findById(req.getId()).orElseThrow(EntityNotFoundException::new);
+        user.updateName(req.getName());
+        user.updateEmail(req.getEmail());
+        user.updateRole(UserRole.valueOf(req.getUserRole().split("_")[1]));
     }
 
     public void deleteUser(String memberId) {

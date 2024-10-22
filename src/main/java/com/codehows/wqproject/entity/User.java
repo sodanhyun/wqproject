@@ -44,10 +44,7 @@ public class User extends BaseTimeEntity {
         this.socialType = socialType;
     }
 
-    public User updateName(String name) {
-        this.name = name;
-        return this;
-    }
+
 
     public static User createByOwn(UserFormDto dto, PasswordEncoder passwordEncoder) {
         User user = new User();
@@ -59,6 +56,15 @@ public class User extends BaseTimeEntity {
         user.setUserRole(UserRole.TEMP);
         user.setSocialType(SocialType.OWN);
         return user;
+    }
+
+    public User updateName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
     }
 
     public void updateRole(UserRole userRole) {

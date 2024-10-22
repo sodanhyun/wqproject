@@ -44,7 +44,6 @@ public class AuthController {
 //        }
 //    }
 
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
         try{
@@ -59,7 +58,7 @@ public class AuthController {
                     REFRESH_TOKEN_DURATION);
             return new ResponseEntity<>(res, HttpStatus.OK);
         }catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("아이디 혹은 비밀번호가 틀렸습니다.", HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 
@@ -71,15 +70,5 @@ public class AuthController {
         authService.invalidRefreshToken(authentication);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @PostMapping("/refresh")
-//    public ResponseEntity<?> refresh(@RequestBody TokenDto tokenDto) {
-//        log.info("refresh in");
-//        try{
-//            return ResponseEntity.ok().body(authService.refresh(tokenDto));
-//        }catch (RuntimeException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
-//        }
-//    }
 
 }
