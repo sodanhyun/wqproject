@@ -25,5 +25,5 @@ public interface LectureService {
     public void delete(String lCode);
     public void update(String lCode, LectureReq lectureReq, MultipartFile img);
     public String updateActive(String lCode, Boolean flag);
-    public Resource lectureImage(String lCode);
+    public Resource lectureImage(String lCode, String thumbs) throws Exception;
 }

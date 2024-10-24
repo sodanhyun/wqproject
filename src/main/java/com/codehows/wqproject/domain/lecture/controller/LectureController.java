@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -111,12 +112,13 @@ public class LectureController {
     }
 
     @GetMapping("/image/{code}")
-    public ResponseEntity<?> lectureImage(@PathVariable String code) {
+    public ResponseEntity<?> lectureImage(@PathVariable String code,
+                                          @RequestParam(value = "thumbs", required = false, defaultValue = "N") String thumbs) {
         try{
-            Resource res = lectureService.lectureImage(code);
+            Resource res = lectureService.lectureImage(code, thumbs);
             return new ResponseEntity<>(res, HttpStatus.OK);
-        }catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("존재하지 않는 이미지 입니다.", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>("존재하지 않는 이미지 입니다.", HttpStatus.BAD_REQUEST);
         }
     }
     

@@ -28,6 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.codehows.wqproject.utils.FileHandler.THUMBNAIL_IMAGE_SUFFIX;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -69,7 +71,7 @@ public class LectureServiceImpl implements LectureService {
         return LectureDetailRes.of(lecture);
     }
 
-    public Resource lectureImage(String lCode) throws EntityNotFoundException {
+    public Resource lectureImage(String lCode, String thumbs) throws Exception {
         Lecture lecture = lectureRepository.findById(lCode)
                 .orElseGet(() -> {
                     log.info("해당 강의 없음");
@@ -80,7 +82,7 @@ public class LectureServiceImpl implements LectureService {
                     log.info("강의 이미지 없음");
                     throw new EntityNotFoundException();
                 });
-        return new FileSystemResource(image.getImgUrl() + image.getOriImgName());
+        return fileHandler.loadFileAsResource(image.getImgUrl(), thumbs.equalsIgnoreCase("y"), image.getOriImgName());
     }
 
     public LectureLimitRes getLimitInfo(String lCode) throws EntityNotFoundException {

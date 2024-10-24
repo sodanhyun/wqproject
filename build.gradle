@@ -28,27 +28,37 @@ repositories {
 }
 
 dependencies {
+	//DB-ORM
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.modelmapper:modelmapper:2.4.2'
 	implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+
+	//ws
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.14.0'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//others
+	implementation 'org.modelmapper:modelmapper:2.4.2'
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'net.coobird:thumbnailator:0.4.8'
 }
 
 tasks.named('test') {
