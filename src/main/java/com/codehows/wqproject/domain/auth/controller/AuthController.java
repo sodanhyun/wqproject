@@ -51,7 +51,7 @@ public class AuthController {
             CookieUtil.addCookie(response,
                     ACCESS_TOKEN_COOKIE_NAME,
                     res.getAccessToken(),
-                    REFRESH_TOKEN_DURATION);
+                    ACCESS_TOKEN_DURATION);
             CookieUtil.addCookie(response,
                     REFRESH_TOKEN_COOKIE_NAME,
                     res.getRefreshToken(),

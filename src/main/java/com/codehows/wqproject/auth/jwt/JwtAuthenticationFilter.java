@@ -36,37 +36,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else if (accessTokenState.equals("expired")) {
                 log.info("Expired access token");
-                if(refreshToken != null) {
-                    String refreshTokenState = jwtTokenProvider.validateRefreshToken(refreshToken);
-                    if (refreshTokenState.equals("success")) {
-                        log.info("Valid refresh token");
-                        Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.getUserIdInRefreshToken(refreshToken));
-                        String userId = authentication.getName();
-                        String newAccessToken = jwtTokenProvider.createJwtToken(userId, "access");
-                        String newRefreshToken = jwtTokenProvider.createJwtToken(userId, "refresh");
-                        if(jwtTokenProvider.refresh(userId, newRefreshToken).equals(newRefreshToken)){
-                            log.info("Complete tokens renew");
-                            CookieUtil.addCookie(response,
-                                    ACCESS_TOKEN_COOKIE_NAME,
-                                    newAccessToken,
-                                    ACCESS_TOKEN_DURATION);
-                            CookieUtil.addCookie(response,
-                                    REFRESH_TOKEN_COOKIE_NAME,
-                                    newRefreshToken,
-                                    REFRESH_TOKEN_DURATION);
-                            SecurityContextHolder.getContext().setAuthentication(authentication);
-                        }
-                    }else if(refreshTokenState.equals("expired")) {
-                        log.info("Expired refresh token");
-                    }else {
-                        log.info("Invalid refresh token");
-                    }
-                }
+                tokenRefresh(response, refreshToken);
             }
         }else {
-            log.info("Invalid access token");
+            tokenRefresh(response, refreshToken);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void tokenRefresh(HttpServletResponse response, String refreshToken) {
+        if(refreshToken != null) {
+            String refreshTokenState = jwtTokenProvider.validateRefreshToken(refreshToken);
+            if (refreshTokenState.equals("success")) {
+                log.info("Valid refresh token");
+                Authentication authentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.getUserIdInRefreshToken(refreshToken));
+                String userId = authentication.getName();
+                String newAccessToken = jwtTokenProvider.createJwtToken(userId, "access");
+                String newRefreshToken = jwtTokenProvider.createJwtToken(userId, "refresh");
+                if(jwtTokenProvider.refresh(userId, newRefreshToken).equals(newRefreshToken)){
+                    log.info("Complete tokens renew");
+                    CookieUtil.addCookie(response,
+                            ACCESS_TOKEN_COOKIE_NAME,
+                            newAccessToken,
+                            ACCESS_TOKEN_DURATION);
+                    CookieUtil.addCookie(response,
+                            REFRESH_TOKEN_COOKIE_NAME,
+                            newRefreshToken,
+                            REFRESH_TOKEN_DURATION);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }else if(refreshTokenState.equals("expired")) {
+                log.info("Expired refresh token");
+            }else {
+                log.info("Invalid refresh token");
+            }
+        }
     }
 
     private String getAccessToken(HttpServletRequest request) {
