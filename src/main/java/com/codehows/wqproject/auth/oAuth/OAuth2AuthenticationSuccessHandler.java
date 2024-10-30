@@ -97,7 +97,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String redirectPath = domainName + (cookie==null ? "/" : cookie.getValue());
 
         return UriComponentsBuilder.fromUriString(redirectPath)
-                .queryParam("user_role", response.getUserRole().getType())
+                .queryParam(USER_ROLE, response.getUserRole().getType())
                 .build()
                 .toUriString();
     }
