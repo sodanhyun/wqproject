@@ -39,10 +39,8 @@ public class WebSocketController {
     public void onConnect(SessionConnectEvent event){
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = accessor.getSessionId();
-        String token = Objects.requireNonNull(
-                accessor.getFirstNativeHeader("Authorization")
-        ).substring(7);
-        String userId = tokenProvider.getAuthentication(tokenProvider.getUserIdInAccessToken(token)).getName();
+        String userId = Objects.requireNonNull(accessor.getUser()).getName();
+        assert sessionId != null;
         CLIENTS.put(sessionId, userId);
         log.info("[새션 연결됨] sessionId: "+ sessionId + " userId: " + userId);
     }
@@ -52,6 +50,7 @@ public class WebSocketController {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = accessor.getSessionId();
         String userId = CLIENTS.get(sessionId);
+        assert sessionId != null;
         CLIENTS.remove(sessionId);
         log.info("[새션 종료됨] sessionId: "+ sessionId + " userId: " + userId);
     }

@@ -59,12 +59,10 @@ public class QuestionService {
                 .orElseThrow(EntityNotFoundException::new);
         List<QuestionDto> result = new ArrayList<>();
         for(Question q : questionRepository.findAllByLecture(lecture)) {
-            Likes likes = likesRepository.findById(new LikeId(q.getQCode(), userId))
-                    .orElse(null);
+            Likes likes = likesRepository.findById(new LikeId(q.getQCode(), userId)).orElse(null);
             QuestionDto questionDto = QuestionDto.of(q);
-            if(likes!=null) {
+            if(likes!=null)
                 questionDto.setMyLike(true);
-            }
             result.add(questionDto);
         }
         return result;
