@@ -5,7 +5,6 @@ import com.codehows.wqproject.auth.jwt.JwtTokenProvider;
 import com.codehows.wqproject.constant.enumVal.SocialType;
 import com.codehows.wqproject.domain.auth.responseDto.TokenRes;
 import com.codehows.wqproject.domain.auth.service.RefreshTokenService;
-import com.codehows.wqproject.entity.RefreshToken;
 import com.codehows.wqproject.entity.User;
 import com.codehows.wqproject.utils.CookieUtil;
 import jakarta.servlet.http.Cookie;
@@ -98,8 +97,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String redirectPath = domainName + (cookie==null ? "/" : cookie.getValue());
 
         return UriComponentsBuilder.fromUriString(redirectPath)
-                .queryParam("access_token", response.getAccessToken())
-                .queryParam("authority", response.getUserRole().getType())
+                .queryParam("user_role", response.getUserRole().getType())
                 .build()
                 .toUriString();
     }
