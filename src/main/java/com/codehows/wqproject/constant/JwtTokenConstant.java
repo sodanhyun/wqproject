@@ -15,6 +15,6 @@ public class JwtTokenConstant {
     public static final String REFRESH_TOKEN_COOKIE_NAME = "X-REFRESH_TOKEN";
     public static final String HEADER_AUTHORIZATION = "authorization";
     public static final Duration OAUTH_COOKIE_EXPIRE = Duration.ofMinutes(5);
-    public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(1);
-    public static final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
+    public static final Duration REFRESH_TOKEN_DURATION = Duration.ofHours(12);
+    public static final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(15);
 }
