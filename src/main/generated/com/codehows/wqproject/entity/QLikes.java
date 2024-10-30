@@ -27,8 +27,6 @@ public class QLikes extends EntityPathBase<Likes> {
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
-    public final StringPath email = createString("email");
-
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
@@ -41,6 +39,8 @@ public class QLikes extends EntityPathBase<Likes> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+
+    public final StringPath userId = createString("userId");
 
     public QLikes(String variable) {
         this(Likes.class, forVariable(variable), INITS);

@@ -21,40 +21,39 @@ public class Question extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Lecture lecture;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private User member;
-
-    @Formula("(SELECT count(1) FROM answer a WHERE a.q_code = q_code)")
-    private Integer answerCount;
-
-    @Formula("(SELECT count(1) FROM likes l WHERE l.q_code = q_code)")
-    private Integer likesCount;
-
-    private String name;
-
     @Column(nullable = false)
     private String content;
 
-    private Boolean pick;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Formula("(SELECT count(1) FROM answer a WHERE a.q_code = q_code)")
+    private Integer answerCnt;
+
+    @Formula("(SELECT count(1) FROM likes l WHERE l.q_code = q_code)")
+    private Integer likesCnt;
+
+    private Boolean isPicked;
 
     @Builder
-    Question(String qCode, Lecture lecture, User member,
-             String name, String content, Boolean pick) {
+    Question(String qCode,
+             Lecture lecture,
+             String content,
+             User user,
+             Boolean isPicked) {
         this.qCode = qCode;
         this.lecture = lecture;
-        this.member = member;
-        this.name = name;
         this.content = content;
-        this.pick = pick;
+        this.user = user;
+        this.isPicked = isPicked;
     }
 
     public static Question createQuestion(QuestionDto questionDto) {
         return Question.builder()
                 .qCode(questionDto.getQCode())
-                .name(questionDto.getName())
                 .content(questionDto.getContent())
-                .pick(questionDto.getPick())
+                .isPicked(questionDto.getPick())
                 .build();
     }
 
@@ -63,11 +62,6 @@ public class Question extends BaseEntity {
     }
 
     public void pickOrInit() {
-        this.pick = !this.pick;
-    }
-
-    public void setNoMember() {
-        this.member = null;
-        this.name = "anonymous";
+        this.isPicked = !this.isPicked;
     }
 }

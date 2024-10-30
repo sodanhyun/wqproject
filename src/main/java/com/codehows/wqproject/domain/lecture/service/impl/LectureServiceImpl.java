@@ -6,6 +6,8 @@ import com.codehows.wqproject.domain.lecture.responseDto.LectureDetailRes;
 import com.codehows.wqproject.domain.lecture.service.LectureService;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureReq;
 import com.codehows.wqproject.domain.lecture.requestDto.LectureSearchConditionReq;
+import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
+import com.codehows.wqproject.domain.question.responseDto.QuestionInfoRes;
 import com.codehows.wqproject.entity.*;
 import com.codehows.wqproject.repository.ImageRepository;
 import com.codehows.wqproject.repository.LikesRepository;
@@ -150,12 +152,12 @@ public class LectureServiceImpl implements LectureService {
 
     public void delete(String lCode) {
         Lecture lecture = lectureRepository.findById(lCode).orElseThrow(EntityNotFoundException::new);
-        List<Question> questions = questionRepository.findAllByLecture(lecture);
-        for(Question q : questions) {
-            answerRepository.deleteAll(answerRepository.findAllByQuestion(q));
-            likesRepository.deleteAll(likesRepository.findAllByQuestion(q));
-            questionRepository.delete(q);
-        }
+        List<QuestionInfoRes> questions = questionRepository.findAllByLCodeDesc(lCode);
+//        for(QuestionDto q : questions) {
+//            answerRepository.deleteAll(answerRepository.findAllByQuestion(q));
+//            likesRepository.deleteAll(likesRepository.findAllByQuestion(q));
+//            questionRepository.delete(q);
+//        }
         deleteLectureImage(lecture);
         lectureRepository.delete(lecture);
     }

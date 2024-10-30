@@ -3,6 +3,7 @@ package com.codehows.wqproject.domain.question.controller;
 import com.codehows.wqproject.domain.lecture.responseDto.LectureDetailRes;
 import com.codehows.wqproject.domain.lecture.service.LectureService;
 import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
+import com.codehows.wqproject.domain.question.responseDto.QuestionInfoRes;
 import com.codehows.wqproject.domain.question.service.impl.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class QuestionController {
     private final LectureService lectureService;
 
     @GetMapping("/list/{lCode}")
-    public ResponseEntity<List<QuestionDto>> questionList(@PathVariable String lCode, Authentication authentication) {
+    public ResponseEntity<List<QuestionInfoRes>> questionList(@PathVariable String lCode, Authentication authentication) {
         return ResponseEntity.ok().body(questionService.findByLecture(lCode, authentication.getName()));
     }
 

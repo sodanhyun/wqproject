@@ -22,13 +22,13 @@ public class Likes extends BaseEntity {
     private Question question;
 
     @Id
-    @Column(name = "email")
-    private String email;
+    @Column(name = "user_id")
+    private String userId;
 
     @Builder
-    Likes(String qCode, Question question, String email) {
+    Likes(String qCode, Question question, String userId) {
         this.qCode = qCode;
         this.question = question;
-        this.email = email;
+        this.userId = userId;
     }
 }

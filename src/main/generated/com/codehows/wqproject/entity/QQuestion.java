@@ -24,25 +24,21 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final com.codehows.wqproject.auditing.QBaseEntity _super = new com.codehows.wqproject.auditing.QBaseEntity(this);
 
-    public final NumberPath<Integer> answerCount = createNumber("answerCount", Integer.class);
+    public final NumberPath<Integer> answerCnt = createNumber("answerCnt", Integer.class);
 
     public final StringPath content = createString("content");
 
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
+    public final BooleanPath isPicked = createBoolean("isPicked");
+
     public final QLecture lecture;
 
-    public final NumberPath<Integer> likesCount = createNumber("likesCount", Integer.class);
-
-    public final QUser member;
+    public final NumberPath<Integer> likesCnt = createNumber("likesCnt", Integer.class);
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
-
-    public final StringPath name = createString("name");
-
-    public final BooleanPath pick = createBoolean("pick");
 
     public final StringPath qCode = createString("qCode");
 
@@ -51,6 +47,8 @@ public class QQuestion extends EntityPathBase<Question> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+
+    public final QUser user;
 
     public QQuestion(String variable) {
         this(Question.class, forVariable(variable), INITS);
@@ -71,7 +69,7 @@ public class QQuestion extends EntityPathBase<Question> {
     public QQuestion(Class<? extends Question> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.lecture = inits.isInitialized("lecture") ? new QLecture(forProperty("lecture")) : null;
-        this.member = inits.isInitialized("member") ? new QUser(forProperty("member")) : null;
+        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 
 }

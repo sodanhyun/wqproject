@@ -13,7 +13,6 @@ public class LikeId implements Serializable {
 
     private String qCode;
 
-    private String email;
-
+    private String userId;
 
 }

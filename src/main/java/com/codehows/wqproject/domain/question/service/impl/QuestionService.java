@@ -2,6 +2,7 @@ package com.codehows.wqproject.domain.question.service.impl;
 
 import com.codehows.wqproject.constant.LikeId;
 import com.codehows.wqproject.domain.question.requestDto.QuestionDto;
+import com.codehows.wqproject.domain.question.responseDto.QuestionInfoRes;
 import com.codehows.wqproject.entity.*;
 import com.codehows.wqproject.repository.LikesRepository;
 import com.codehows.wqproject.repository.AnswerRepository;
@@ -44,8 +45,8 @@ public class QuestionService {
             Question question = Question.builder()
                     .qCode(nextKey)
                     .lecture(lecture)
-                    .pick(false)
-                    .member(member)
+                    .isPicked(false)
+                    .user(member)
                     .content(content)
                     .build();
             return QuestionDto.of(questionRepository.save(question));
@@ -54,24 +55,18 @@ public class QuestionService {
         }
     }
 
-    public List<QuestionDto> findByLecture(String lCode, String userId) {
-        Lecture lecture = lectureRepository.findById(lCode)
-                .orElseThrow(EntityNotFoundException::new);
-        List<QuestionDto> result = new ArrayList<>();
-        for(Question q : questionRepository.findAllByLecture(lecture)) {
-            Likes likes = likesRepository.findById(new LikeId(q.getQCode(), userId)).orElse(null);
-            QuestionDto questionDto = QuestionDto.of(q);
-            if(likes!=null)
-                questionDto.setMyLike(true);
-            result.add(questionDto);
-        }
+    public List<QuestionInfoRes> findByLecture(String lCode, String userId) {
+        List<QuestionInfoRes> result = questionRepository.findAllByLCodeDesc(lCode);
+        for(QuestionInfoRes q : result)
+            likesRepository.findById(new LikeId(q.getQCode(), userId))
+                    .ifPresent(likes -> q.setMyLike(true));
         return result;
     }
 
     public List<QuestionDto> findFilteredByPick(String lCode) {
         Lecture lecture = lectureRepository.findById(lCode)
                 .orElseThrow(EntityNotFoundException::new);
-        return questionRepository.findAllByLectureAndPick(lecture, true)
+        return questionRepository.findAllByLectureAndIsPicked(lecture, true)
                 .stream()
                 .map(QuestionDto::of)
                 .collect(Collectors.toList());
@@ -80,7 +75,7 @@ public class QuestionService {
     public void delete(String qCode) throws RuntimeException {
         Question question = questionRepository.findById(qCode)
                 .orElseThrow(EntityNotFoundException::new);
-        if(!question.getPick()) {
+        if(!question.getIsPicked()) {
             for(Answer a : answerRepository.findAllByQuestion(question))
                 answerRepository.delete(a);
             for(Likes l : likesRepository.findAllByQuestion(question))
@@ -95,7 +90,7 @@ public class QuestionService {
         log.info(qCode + " " + content);
         Question question = questionRepository.findById(qCode)
                 .orElseThrow(EntityNotFoundException::new);
-        if(!question.getPick()) {
+        if(!question.getIsPicked()) {
             question.updateContent(content);
         }else {
             throw new RuntimeException("이미 채택된 질문은 수정할 수 없습니다.");
@@ -112,12 +107,12 @@ public class QuestionService {
     public Boolean like(String qCode, String userId) throws EntityNotFoundException {
         Question question = questionRepository.findById(qCode)
                 .orElseThrow(EntityNotFoundException::new);
-        Likes like = likesRepository.findByQuestionAndEmail(question, userId).orElse(null);
+        Likes like = likesRepository.findByQuestionAndUserId(question, userId).orElse(null);
         if(like==null) {
             likesRepository.save(Likes.builder()
                     .qCode(qCode)
                     .question(question)
-                    .email(userId)
+                    .userId(userId)
                     .build());
             return true;
         }else {

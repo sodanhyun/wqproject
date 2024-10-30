@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void deleteUser(String memberId) {
-        for(Question q : questionRepository.findAllByMemberId(memberId)) {
+        for(Question q : questionRepository.findAllByUserId(memberId)) {
             answerRepository.deleteAll(answerRepository.findAllByQuestion(q));
             questionRepository.delete(q);
         }

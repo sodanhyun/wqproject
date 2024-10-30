@@ -60,9 +60,9 @@ public class QuestionDto {
     public static QuestionDto of(Question question) {
         QuestionDto dto = modelMapper.map(question, QuestionDto.class);
         dto.setLCode(question.getLecture().getLCode());
-        dto.setName(question.getMember().getName());
-        dto.setAnswerCount(question.getAnswerCount()==null ? 0 : (question.getAnswerCount()));
-        dto.setLikesCount(question.getLikesCount()==null ? 0 : (question.getLikesCount()));
+//        dto.setName(question.getUserName());
+//        dto.setAnswerCount(question.getAnswerCount()==null ? 0 : (question.getAnswerCount()));
+//        dto.setLikesCount(question.getLikesCount()==null ? 0 : (question.getLikesCount()));
         dto.setMyLike(false);
         return dto;
     }

@@ -61,13 +61,9 @@ dependencies {
 	implementation 'net.coobird:thumbnailator:0.4.8'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
-
 def querydslSrcDir = 'src/main/generated'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
 

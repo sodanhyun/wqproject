@@ -16,7 +16,7 @@ public interface LikesRepository extends CrudRepository<Likes, LikeId> {
 
     List<Likes> findAllByQuestion(Question question);
 
-    Optional<Likes> findByQuestionAndEmail(Question question, String email);
+    Optional<Likes> findByQuestionAndUserId(Question question, String userId);
 
     @Modifying
     @Query("delete from Likes l where l.qCode in :ids")
