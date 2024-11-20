@@ -3,9 +3,9 @@
     <logger name="org.springframework.beans.factory" level="warn"/>
     <springProfile name="dev">
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <endocer>
+            <encoder>
                 <pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36} - %msg%n</pattern>
-            </endocer>
+            </encoder>
         </appender>
         <root level="info">
             <appender-ref ref="STDOUT"/>
