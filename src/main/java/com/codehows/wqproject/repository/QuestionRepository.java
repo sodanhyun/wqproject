@@ -12,7 +12,7 @@ public interface QuestionRepository extends CrudRepository<Question,String>, Que
 
     List<Question> findAllByLectureAndIsPicked(Lecture lecture, Boolean flag);
 
-    List<Question> findAllByLCode(String LCode);
+    List<Question> findAllByLecture(Lecture lecture);
 
     List<Question> findAllByUserId(String userId);
 

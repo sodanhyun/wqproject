@@ -152,7 +152,7 @@ public class LectureServiceImpl implements LectureService {
 
     public void delete(String lCode) {
         Lecture lecture = lectureRepository.findById(lCode).orElseThrow(EntityNotFoundException::new);
-        List<Question> questions = questionRepository.findAllByLCode(lCode);
+        List<Question> questions = questionRepository.findAllByLecture(lecture);
         for(Question q : questions) {
             answerRepository.deleteAll(answerRepository.findAllByQuestion(q));
             likesRepository.deleteAll(likesRepository.findAllByQuestion(q));

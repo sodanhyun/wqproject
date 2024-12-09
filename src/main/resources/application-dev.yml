@@ -21,5 +21,5 @@ spring:
 
 jwt:
   issuer: wqproject
-  secret-access-key: test=access=key
-  secret-refresh-key: test=refresh=key
+  secret-access-key: test=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=key
+  secret-refresh-key: test=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=key
