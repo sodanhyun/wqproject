@@ -1,6 +1,4 @@
-domainName: "https://localhost:5173"
-uploadPath: C:/wqproject/resource/image/
-#uploadPath: /Users/danhyeon/wqproject/resource/image/
+domainName: "http://localhost:3000"
 
 server:
   port: 8080
@@ -11,15 +9,15 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://localhost:3306/wqproject?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/halmang?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul
     username: root
     password: 1234
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
 
 jwt:
-  issuer: wqproject
+  issuer: halmang
   secret-access-key: test=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=keytest=access=key
   secret-refresh-key: test=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=keytest=refresh=key

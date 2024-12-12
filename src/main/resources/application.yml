@@ -10,7 +10,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-        default_batch_fetch_size: 1000
+        default_batch_fetch_size: 100
     open-in-view: false
 
   servlet:
@@ -20,7 +20,6 @@ spring:
       enabled: true
 
 logging:
-  config: classpath:logback-spring.xml
   level:
     org:
       hibernate:
